@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Radicitus.Health.Data.Contexts;
 using VueCliMiddleware;
 
 namespace Radicitus.Health
@@ -20,6 +22,11 @@ namespace Radicitus.Health
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionString = Configuration.GetConnectionString("radicitus-health");
+            services.AddDbContext<RadicitusHealthContext>(optionsAction =>
+            {
+                optionsAction.UseNpgsql(connectionString);
+            });
             services.AddControllers();
             // In production, the Vue files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
