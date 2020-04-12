@@ -1,0 +1,5 @@
+{
+  "extends": [
+    "/health-app/tslint.json"
+  ]
+}
