@@ -53,10 +53,32 @@ namespace Radicitus.Health.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<IActionResult> GetHealthInitiatives()
+        public IActionResult GetHealthInitiatives()
         {
             var items = _db.HealthInitiatives.Include(x => x.HealthParticipants).AsEnumerable();
-            return Ok();
+            var dtos = items.Select(x =>
+            {
+                var participants = x.HealthParticipants.Select(y =>
+                {
+                    return new HealthParticipantDto
+                    {
+                        HealthInitiativeId = y.HealthInitiativeId,
+                        Name = y.Name,
+                        IndividualWeightLossGoal = y.IndividualWeightLossGoal
+                    };
+                });
+                var dto = new HealthInitiativeDto
+                {
+                    Id = x.Id,
+                    IsCurrent = x.IsCurrent,
+                    Participants = participants.ToList(),
+                    StartDateTime = x.StartDateTime,
+                    Name = x.Name,
+                    TotalWeightLossGoal = x.TotalWeightLossGoal
+                };
+                return dto;
+            });
+            return Ok(dtos);
         }
     }
 }

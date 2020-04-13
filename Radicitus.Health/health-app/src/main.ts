@@ -4,11 +4,11 @@ import router from './router'
 import store from './store'
 import 'bulma'
 import buefy from 'buefy'
-import 'axios'
+import Axios from 'axios'
 
 Vue.use(buefy);
 Vue.config.productionTip = false
-
+Axios.defaults.headers.common['content-type'] = 'application/json'
 new Vue({
   router,
   store,
