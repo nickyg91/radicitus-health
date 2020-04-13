@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Radicitus.Health.Dto.Dto
@@ -8,5 +9,9 @@ namespace Radicitus.Health.Dto.Dto
         public string Name { get; set; }
         public decimal TotalWeightLossGoal { get; set; }
         public List<HealthParticipantDto> Participants { get; set; }
+
+        public bool IsCurrent { get; set; }
+
+        public DateTime StartDateTime { get; set; }
     }
 }
