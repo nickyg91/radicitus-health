@@ -26,7 +26,10 @@ namespace Radicitus.Health
             var dbContext = new RadicitusHealthContext();
             services.AddDbContext<RadicitusHealthContext>(optionsAction =>
             {
-                optionsAction.UseNpgsql(connectionString);
+                optionsAction.UseNpgsql(connectionString, builder =>
+                {
+                    builder.MigrationsAssembly("Radicitus.Health");
+                });
             });
             services.AddControllers();
             // In production, the Vue files will be served from this directory
