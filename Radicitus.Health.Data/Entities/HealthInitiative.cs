@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Radicitus.Health.Dto;
@@ -13,5 +14,6 @@ namespace Radicitus.Health.Data.Entities
         public string Name { get; set; }
         [Column(TypeName = "decimal(4,1)")]
         public decimal TotalWeightLossGoal { get; set; }
+        public List<HealthParticipant> HealthParticipants { get; set; } = new List<HealthParticipant>();
     }
 }

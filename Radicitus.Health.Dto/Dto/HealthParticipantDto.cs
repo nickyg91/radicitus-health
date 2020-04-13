@@ -12,6 +12,6 @@ namespace Radicitus.Health.Dto.Dto
 
         public decimal IndividualWeightLossGoal { get; set; }
 
-        public List<IParticipantLog> ParticipantLogs { get; set; }
+        public List<ParticipantLogDto> ParticipantLogs { get; set; }
     }
 }

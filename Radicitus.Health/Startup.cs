@@ -23,6 +23,7 @@ namespace Radicitus.Health
         public void ConfigureServices(IServiceCollection services)
         {
             var connectionString = Configuration.GetConnectionString("radicitus-health");
+            var dbContext = new RadicitusHealthContext();
             services.AddDbContext<RadicitusHealthContext>(optionsAction =>
             {
                 optionsAction.UseNpgsql(connectionString);

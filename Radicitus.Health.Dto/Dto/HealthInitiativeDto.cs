@@ -7,6 +7,6 @@ namespace Radicitus.Health.Dto.Dto
         public int Id { get; set; }
         public string Name { get; set; }
         public decimal TotalWeightLossGoal { get; set; }
-        public List<IHealthParticipant> Participants { get; set; }
+        public List<HealthParticipantDto> Participants { get; set; }
     }
 }

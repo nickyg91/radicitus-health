@@ -8,24 +8,28 @@ namespace Radicitus.Health.Data.Contexts
     public class RadicitusHealthContext : DbContext
     {
         private readonly string _connectionString;
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(_connectionString, builder =>
+            if (!optionsBuilder.IsConfigured)
             {
-                builder.MigrationsAssembly("Radicitus.Health");
-            });
+                optionsBuilder.UseNpgsql(_connectionString, builder =>
+                {
+                    builder.MigrationsAssembly("Radicitus.Health");
+                });
+            }
         }
 
-        public RadicitusHealthContext() : base()
+        public RadicitusHealthContext(DbContextOptions<RadicitusHealthContext> options) : base(options)
         {
             var configuration = new ConfigurationBuilder();
             var builtConfig = configuration.SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
             _connectionString = builtConfig.GetConnectionString("radicitus-health");
         }
 
-        public RadicitusHealthContext(string connectionString)
+        public RadicitusHealthContext() : base()
         {
-            _connectionString = connectionString;
+
         }
 
         public DbSet<HealthInitiative> HealthInitiatives { get; set; }
