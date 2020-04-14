@@ -12,6 +12,7 @@ namespace Radicitus.Health.Dto.Dto
 
         public bool IsCurrent { get; set; }
 
-        public DateTime? StartDateTime { get; set; }
+        public DateTime StartDateTime { get; set; }
+        public DateTime EndDateTime { get; set; }
     }
 }

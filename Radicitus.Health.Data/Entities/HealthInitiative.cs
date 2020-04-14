@@ -16,7 +16,8 @@ namespace Radicitus.Health.Data.Entities
         [Column(TypeName = "decimal(4,1)")]
         public decimal TotalWeightLossGoal { get; set; }
         public bool IsCurrent { get; set; }
-        public DateTime? StartDateTime { get; set; }
+        public DateTime StartDateTime { get; set; }
+        public DateTime EndDateTime { get; set; }
         public List<HealthParticipant> HealthParticipants { get; set; } = new List<HealthParticipant>();
     }
 }

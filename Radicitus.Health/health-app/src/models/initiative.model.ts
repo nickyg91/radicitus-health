@@ -6,5 +6,6 @@ export default class HealthInitiative {
     public totalWeightLossGoal!: number;
     public isCurrent!: boolean;
     public startDateTime!: Date;
+    public endDateTime!: Date;
     public participants!: Array<Participant>;
 }

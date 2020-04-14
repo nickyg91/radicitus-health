@@ -1,6 +1,9 @@
 <template>
   <section class="section">
-    <div v-for="initiative in initiatives" v-bind:key="initiative.id">{{initiative.name}}</div>
+    <b-tabs v-model="activeTab" position="is-centered" class="block">
+      <b-tab-item label="Create"></b-tab-item>
+      <b-tab-item label="View"></b-tab-item>
+    </b-tabs>
   </section>
 </template>
 <script lang="ts">
@@ -12,6 +15,7 @@ import Component from 'vue-class-component';
 export default class HealthInitiativesAdmin extends Vue {
   public service = new AdminService();
   public initiatives = new Array<HealthInitiative>();
+  public activeTab = 0;
   async mounted() {
     this.initiatives = await this.service.getInitiatives();
   }

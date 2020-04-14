@@ -132,6 +132,16 @@ Special thanks to everyone who helped and contributed to this project!
 
 ---
 
+## Radicitus Health specific setup
+
+In order to run the database, you must first have a postgres instance running either in docker or natively.
+Run the following docker command to start up an instance.
+docker run --restart unless-stopped -v %my-created-volume%  --name radicitus-health -p 5432:5432  -e POSTGRES_PASSWORD='strong password' -d postgres
+Once you have a database running, run the EF migrations by installing the .net core cli EF migrations tool by running dotnet tool install --global dotnet-ef
+Once installed, run the following command in the Radicitus.Health project: dotnet ef database update.
+This should get you a blank database to start with.
+
+
 ## License
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://mit-license.org/)
