@@ -7,8 +7,7 @@ namespace Radicitus.Health.Dto
         int Id { get; }
         string Name { get; }
         decimal TotalWeightLossGoal { get; }
-        bool IsCurrent { get; }
-        DateTime StartDateTime { get; }
-        DateTime EndDateTime { get; }
+        DateTime? StartDateTime { get; }
+        DateTime? EndDateTime { get; }
     }
 }

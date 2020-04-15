@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Radicitus.Health.Data.Contexts;
+using Radicitus.Health.Data.Repositories.Implementations;
+using Radicitus.Health.Data.Repositories.Interfaces;
 using VueCliMiddleware;
 
 namespace Radicitus.Health
@@ -31,6 +33,9 @@ namespace Radicitus.Health
                     builder.MigrationsAssembly("Radicitus.Health");
                 });
             });
+
+            services.AddScoped<IHealthInitiativeRepository, HealthInitiativeRepository>();
+
             services.AddControllers();
             // In production, the Vue files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

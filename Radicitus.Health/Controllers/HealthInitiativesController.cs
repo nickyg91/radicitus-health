@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Radicitus.Health.Data.Contexts;
 using Radicitus.Health.Data.Entities;
+using Radicitus.Health.Data.Repositories.Interfaces;
 using Radicitus.Health.Dto.Dto;
 
 namespace Radicitus.Health.Controllers
@@ -14,48 +15,35 @@ namespace Radicitus.Health.Controllers
     [ApiController, Route("/api/health/initiatives")]
     public class HealthInitiativesController : Controller
     {
-        private readonly RadicitusHealthContext _db;
-        public HealthInitiativesController(RadicitusHealthContext dbContext)
+        private readonly IHealthInitiativeRepository _repo;
+        public HealthInitiativesController(IHealthInitiativeRepository repo)
         {
-            _db = dbContext;
+            _repo = repo;
         }
 
         [HttpPost("create")]
         public async Task<IActionResult> CreateInitiative(HealthInitiativeDto model)
         {
-            using var transaction = await _db.Database.BeginTransactionAsync();
-            try
+            var dbEntity = new HealthInitiative
             {
-                var dbEntity = new HealthInitiative
+                Id = model.Id,
+                Name = model.Name,
+                TotalWeightLossGoal = model.TotalWeightLossGoal,
+                HealthParticipants = model.Participants.Select(x => new HealthParticipant
                 {
-                    Id = model.Id,
-                    Name = model.Name,
-                    TotalWeightLossGoal = model.TotalWeightLossGoal
-                };
-                var participants = model.Participants.Select(x =>
-                {
-                    return new HealthParticipant
-                    {
-                        IndividualWeightLossGoal = x.IndividualWeightLossGoal,
-                        Name = x.Name
-                    };
-                }).ToList();
-                dbEntity.HealthParticipants.AddRange(participants);
-                _db.HealthInitiatives.Add(dbEntity);
-                await _db.SaveChangesAsync();
-                transaction.Commit();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
-            }
-            return Ok();
+                    IndividualWeightLossGoal = x.IndividualWeightLossGoal,
+                    Name = x.Name
+                }).ToList()
+            };
+            await _repo.InsertHealthInitiativeAsync(dbEntity);
+
+            return Ok(dbEntity.Id);
         }
 
         [HttpGet("all")]
-        public IActionResult GetHealthInitiatives()
+        public async Task<IActionResult> GetHealthInitiatives()
         {
-            var items = _db.HealthInitiatives.Include(x => x.HealthParticipants).AsEnumerable();
+            var items = await _repo.GetHealthInitativesAsync();
             var dtos = items.Select(x =>
             {
                 var participants = x.HealthParticipants.Select(y =>
@@ -64,13 +52,14 @@ namespace Radicitus.Health.Controllers
                     {
                         HealthInitiativeId = y.HealthInitiativeId,
                         Name = y.Name,
-                        IndividualWeightLossGoal = y.IndividualWeightLossGoal
+                        IndividualWeightLossGoal = y.IndividualWeightLossGoal,
+                        Id = y.Id
                     };
                 });
+
                 var dto = new HealthInitiativeDto
                 {
                     Id = x.Id,
-                    IsCurrent = x.IsCurrent,
                     Participants = participants.ToList(),
                     StartDateTime = x.StartDateTime,
                     Name = x.Name,
@@ -79,6 +68,13 @@ namespace Radicitus.Health.Controllers
                 return dto;
             });
             return Ok(dtos);
+        }
+
+        [HttpDelete("remove/{id:int}")]
+        public async Task<IActionResult> RemoveHealthInitiative(int id)
+        {
+            await _repo.DeleteHealthInitiativeAsync(id);
+            return Ok();
         }
     }
 }

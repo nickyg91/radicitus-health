@@ -9,4 +9,13 @@ export default class AdminService {
         });
         return response.data;
     }
+
+    public async createInitative(initiative: HealthInitiative): Promise<void> {
+        console.log(initiative);
+        await Axios.post('api/health/initiatives/create', { initiative }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    }
 }
