@@ -9,5 +9,6 @@ namespace Radicitus.Health.Data.Repositories.Interfaces
         Task InsertHealthInitiativeAsync(HealthInitiative initiative);
         Task DeleteHealthInitiativeAsync(int id);
         Task<List<HealthInitiative>> GetHealthInitativesAsync();
+        Task<HealthInitiative> GetCurrentHealthInitiativeAsync();
     }
 }

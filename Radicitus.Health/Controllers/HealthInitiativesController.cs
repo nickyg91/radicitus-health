@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Radicitus.Health.Data.Contexts;
 using Radicitus.Health.Data.Entities;
 using Radicitus.Health.Data.Repositories.Interfaces;
 using Radicitus.Health.Dto.Dto;
@@ -29,16 +24,32 @@ namespace Radicitus.Health.Controllers
                 Id = model.Id,
                 Name = model.Name,
                 TotalWeightLossGoal = model.TotalWeightLossGoal,
-                HealthParticipants = model.Participants.Select(x => new HealthParticipant
+                HealthParticipants = model.Participants?.Select(x => new HealthParticipant
                 {
                     IndividualWeightLossGoal = x.IndividualWeightLossGoal,
                     Name = x.Name
-                }).ToList()
+                }).ToList(),
+                StartDateTime = model.StartDateTime,
+                EndDateTime = model.EndDateTime
             };
             await _repo.InsertHealthInitiativeAsync(dbEntity);
 
             return Ok(dbEntity.Id);
         }
+
+        // [HttpGet("current")]
+        // public async Task<IActionResult> GetCurrentInitiative()
+        // {
+        //     var dbInitiative = await _repo.GetCurrentHealthInitiativeAsync();
+        //     var leaderboard = new CurrentHealthInitiative
+        //     {
+        //         HealthInitiative = new HealthInitiativeDto
+        //         {
+        //             Name = dbInitiative.Name,
+        //             TotalWeightLossGoal = dbInitiative.TotalWeightLossGoal
+        //         },
+        //     };
+        // }
 
         [HttpGet("all")]
         public async Task<IActionResult> GetHealthInitiatives()
@@ -62,6 +73,7 @@ namespace Radicitus.Health.Controllers
                     Id = x.Id,
                     Participants = participants.ToList(),
                     StartDateTime = x.StartDateTime,
+                    EndDateTime = x.EndDateTime,
                     Name = x.Name,
                     TotalWeightLossGoal = x.TotalWeightLossGoal
                 };
@@ -76,5 +88,12 @@ namespace Radicitus.Health.Controllers
             await _repo.DeleteHealthInitiativeAsync(id);
             return Ok();
         }
+
+        // private LeaderboardParticipantDto MapParticipantsToLeaderboard(HealthInitiative initiative)
+        // {
+        //     var dict = initiative
+        //         .HealthParticipants
+        //         .SelectMany(x => x.ParticipantLogs).GroupBy(x => x.ParticipantId, x => )
+        // }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace Radicitus.Health.Data.Repositories.Implementations
 {
     public class HealthInitiativeRepository : IHealthInitiativeRepository
     {
-        private RadicitusHealthContext _db;
+        private readonly RadicitusHealthContext _db;
         public HealthInitiativeRepository(RadicitusHealthContext db)
         {
             _db = db;
@@ -33,6 +34,15 @@ namespace Radicitus.Health.Data.Repositories.Implementations
         {
             await _db.HealthInitiatives.AddAsync(initiative);
             await _db.SaveChangesAsync();
+        }
+
+        public async Task<HealthInitiative> GetCurrentHealthInitiativeAsync()
+        {
+            var now = DateTime.Now;
+            return await _db.HealthInitiatives
+                .Include(x => x.HealthParticipants)
+                .ThenInclude(x => x.ParticipantLogs)
+                .SingleOrDefaultAsync(x => x.StartDateTime.Value.Date > now.Date && x.EndDateTime.Value.Date <= now.Date);
         }
     }
 }

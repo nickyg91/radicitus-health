@@ -5,7 +5,7 @@
         <view-admin-health-initiatives v-bind:healthInitiatives="initiatives"></view-admin-health-initiatives>
       </b-tab-item>
       <b-tab-item label="Create">
-        <create-health-initiative></create-health-initiative>
+        <create-health-initiative v-on:created-initative="refresh"></create-health-initiative>
       </b-tab-item>
     </b-tabs>
   </section>
@@ -28,6 +28,9 @@ export default class HealthInitiativesAdmin extends Vue {
   public initiatives = new Array<HealthInitiative>();
   public activeTab = 0;
   async mounted() {
+    this.initiatives = await this.service.getInitiatives();
+  }
+  async refresh() {
     this.initiatives = await this.service.getInitiatives();
   }
 }
