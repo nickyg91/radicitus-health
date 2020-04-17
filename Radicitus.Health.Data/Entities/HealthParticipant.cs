@@ -18,5 +18,6 @@ namespace Radicitus.Health.Data.Entities
         public decimal IndividualWeightLossGoal { get; set; }
         public HealthInitiative HealthInitiative { get; set; }
         public List<ParticipantLog> ParticipantLogs { get; set; }
+        public decimal StartingWeight { get; set; }
     }
 }

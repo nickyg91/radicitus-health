@@ -15,5 +15,7 @@ namespace Radicitus.Health.Dto.Dto
         public decimal IndividualWeightLossGoal { get; set; }
         [JsonPropertyName("participantLogs")]
         public List<ParticipantLogDto> ParticipantLogs { get; set; }
+        [JsonPropertyName("startingWeight")]
+        public decimal StartingWeight { get; set; }
     }
 }

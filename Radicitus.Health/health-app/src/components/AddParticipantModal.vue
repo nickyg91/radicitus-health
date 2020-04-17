@@ -26,10 +26,21 @@
               max="256"
             ></b-input>
           </b-field>
-          <b-field label="Goal">
+          <b-field label="Starting Weight">
             <b-input
-              validation-message="Name is required!"
-              placeholder="Goal"
+              validation-message="Starting Weight is required!"
+              placeholder="100.5"
+              v-model.number="participant.startingWeight"
+              type="text"
+              required
+              min="5"
+              max="256"
+            ></b-input>
+          </b-field>
+          <b-field label="Goal Weight">
+            <b-input
+              validation-message="Goal Weight is required!"
+              placeholder="100.5"
               v-model.number="participant.individualWeightLossGoal"
               type="text"
               required
@@ -56,6 +67,7 @@
               <thead>
                 <tr>
                   <th>Name</th>
+                  <th>Starting Weight</th>
                   <th>Weight Loss Goal</th>
                   <th></th>
                 </tr>
@@ -63,6 +75,7 @@
               <tbody>
                 <tr v-for="(participant, index) in participants" v-bind:key="participant.name">
                   <td>{{participant.name}}</td>
+                  <td>{{participant.startingWeight}} lbs.</td>
                   <td>{{participant.individualWeightLossGoal}} lbs.</td>
                   <td class="has-text-centered">
                     <button @click="removeParticipant(index)" class="button is-danger">
@@ -121,7 +134,9 @@ export default class AddParticpantModal extends Vue {
   }
 
   validParticipant() {
-    return this.participant.name && this.participant.individualWeightLossGoal;
+    return this.participant.name
+      && this.participant.individualWeightLossGoal
+      && this.participant.startingWeight;
   }
 }
 </script>

@@ -6,5 +6,6 @@ namespace Radicitus.Health.Dto
         int HealthInitiativeId { get; }
         string Name { get; }
         decimal IndividualWeightLossGoal { get; }
+        decimal StartingWeight { get; }
     }
 }

@@ -6,4 +6,5 @@ export default class Participant {
     public name!: string;
     public individualWeightLossGoal!: number;
     public participantLogs!: Array<ParticipantLog>;
+    public startingWeight!: number;
 }

@@ -27,7 +27,8 @@ namespace Radicitus.Health.Controllers
                 HealthParticipants = model.Participants?.Select(x => new HealthParticipant
                 {
                     IndividualWeightLossGoal = x.IndividualWeightLossGoal,
-                    Name = x.Name
+                    Name = x.Name,
+                    StartingWeight = x.StartingWeight
                 }).ToList(),
                 StartDateTime = model.StartDateTime,
                 EndDateTime = model.EndDateTime
