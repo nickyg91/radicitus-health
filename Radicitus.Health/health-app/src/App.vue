@@ -1,7 +1,6 @@
 <style lang="scss">
 .header-image {
-  width: 15%;
-  height: 15%;
+  width: 8%;
 }
 // Import Bulma's core
 @import "~bulma/sass/utilities/_all";

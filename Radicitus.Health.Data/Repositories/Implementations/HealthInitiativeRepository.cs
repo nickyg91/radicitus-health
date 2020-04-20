@@ -42,8 +42,9 @@ namespace Radicitus.Health.Data.Repositories.Implementations
             return await _db.HealthInitiatives
                 .Include(x => x.HealthParticipants)
                 .ThenInclude(x => x.ParticipantLogs)
-                .SingleOrDefaultAsync(x => x.StartDateTime.Value.Date > now.Date
-                    && x.EndDateTime.Value.Date <= now.Date);
+                .FirstOrDefaultAsync();
+            // .SingleOrDefaultAsync(x => x.StartDateTime.Value.Date > now.Date
+            //     && x.EndDateTime.Value.Date <= now.Date);
         }
     }
 }

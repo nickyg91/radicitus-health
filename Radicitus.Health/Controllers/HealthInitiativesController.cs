@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -38,19 +39,24 @@ namespace Radicitus.Health.Controllers
             return Ok(dbEntity.Id);
         }
 
-        // [HttpGet("current")]
-        // public async Task<IActionResult> GetCurrentInitiative()
-        // {
-        //     var dbInitiative = await _repo.GetCurrentHealthInitiativeAsync();
-        //     var leaderboard = new CurrentHealthInitiative
-        //     {
-        //         HealthInitiative = new HealthInitiativeDto
-        //         {
-        //             Name = dbInitiative.Name,
-        //             TotalWeightLossGoal = dbInitiative.TotalWeightLossGoal
-        //         },
-        //     };
-        // }
+        [HttpGet("current")]
+        public async Task<IActionResult> GetCurrentInitiative()
+        {
+            var dbInitiative = await _repo.GetCurrentHealthInitiativeAsync();
+            var leaderboard = TallyPointsAndMapParticipantsToLeaderboard(dbInitiative);
+            var currentHealthInitiative = new CurrentHealthInitiative
+            {
+                HealthInitiative = new HealthInitiativeDto
+                {
+                    Name = dbInitiative.Name,
+                    TotalWeightLossGoal = dbInitiative.TotalWeightLossGoal,
+                },
+                Leaderboard = leaderboard,
+                Goal = (int)leaderboard.Sum(x => x.PoundsLost),
+
+            };
+            return Ok(currentHealthInitiative);
+        }
 
         [HttpGet("all")]
         public async Task<IActionResult> GetHealthInitiatives()
@@ -90,11 +96,46 @@ namespace Radicitus.Health.Controllers
             return Ok();
         }
 
-        // private LeaderboardParticipantDto MapParticipantsToLeaderboard(HealthInitiative initiative)
-        // {
-        //     var dict = initiative
-        //         .HealthParticipants
-        //         .SelectMany(x => x.ParticipantLogs).GroupBy(x => x.ParticipantId, x => )
-        // }
+        private List<LeaderboardParticipantDto> TallyPointsAndMapParticipantsToLeaderboard(HealthInitiative initiative)
+        {
+            var participantLogs = initiative.HealthParticipants
+                .SelectMany(x => x.ParticipantLogs)
+                .GroupBy(x => x.ParticipantId)
+                .ToDictionary(x => x.Key, x => x.ToList());
+            var leaderboardParticipants = new List<LeaderboardParticipantDto>();
+            foreach (var participant in initiative.HealthParticipants)
+            {
+                if (participant.ParticipantLogs.Any())
+                {
+                    var weightLost = 0.0m;
+                    var overallWeightLoss = participantLogs[participant.Id]
+                                        .OrderByDescending(x => x.CurrentWeight)
+                                        .Select(x => x.CurrentWeight)
+                                        .Aggregate((x, y) => { weightLost += x - y; return x; });
+                    var postPoints = participantLogs[participant.Id].Count();
+                    var postPointsWithPictures = participantLogs[participant.Id].Where(x => x.Photo != null).Count() * 2;
+                    var leaderboardParticipantDto = new LeaderboardParticipantDto
+                    {
+                        Name = participant.Name,
+                        Points = postPoints + postPointsWithPictures,
+                        PoundsLost = overallWeightLoss,
+                        GoalTotal = participant.IndividualWeightLossGoal
+                    };
+                    leaderboardParticipants.Add(leaderboardParticipantDto);
+                }
+                else
+                {
+                    var leaderboardParticipantDto = new LeaderboardParticipantDto
+                    {
+                        Name = participant.Name,
+                        Points = 0,
+                        PoundsLost = 0,
+                        GoalTotal = 0
+                    };
+                    leaderboardParticipants.Add(leaderboardParticipantDto);
+                }
+            }
+            return leaderboardParticipants.OrderByDescending(x => x.Points).ToList();
+        }
     }
 }
