@@ -3,6 +3,6 @@ export default class LeaderboardEntry {
     public name!: string;
     public poundsLost!: number;
     public goalTotal!: number;
-    public PercentTowardsGoal!: number;
+    public percentTowardsGoal!: number;
     public points!: number;
 }

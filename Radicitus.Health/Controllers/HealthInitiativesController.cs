@@ -43,6 +43,10 @@ namespace Radicitus.Health.Controllers
         public async Task<IActionResult> GetCurrentInitiative()
         {
             var dbInitiative = await _repo.GetCurrentHealthInitiativeAsync();
+            if (dbInitiative == null)
+            {
+                return Ok(new CurrentHealthInitiative());
+            }
             var leaderboard = TallyPointsAndMapParticipantsToLeaderboard(dbInitiative);
             var currentHealthInitiative = new CurrentHealthInitiative
             {
@@ -98,44 +102,52 @@ namespace Radicitus.Health.Controllers
 
         private List<LeaderboardParticipantDto> TallyPointsAndMapParticipantsToLeaderboard(HealthInitiative initiative)
         {
-            var participantLogs = initiative.HealthParticipants
-                .SelectMany(x => x.ParticipantLogs)
-                .GroupBy(x => x.ParticipantId)
-                .ToDictionary(x => x.Key, x => x.ToList());
-            var leaderboardParticipants = new List<LeaderboardParticipantDto>();
-            foreach (var participant in initiative.HealthParticipants)
+            if (initiative.HealthParticipants != null)
             {
-                if (participant.ParticipantLogs.Any())
+                var participantLogs = initiative.HealthParticipants
+                                .SelectMany(x => x.ParticipantLogs)
+                                .GroupBy(x => x.ParticipantId)
+                                .ToDictionary(x => x.Key, x => x.ToList());
+                var leaderboardParticipants = new List<LeaderboardParticipantDto>();
+                foreach (var participant in initiative.HealthParticipants)
                 {
-                    var weightLost = 0.0m;
-                    var overallWeightLoss = participantLogs[participant.Id]
-                                        .OrderByDescending(x => x.CurrentWeight)
-                                        .Select(x => x.CurrentWeight)
-                                        .Aggregate((x, y) => { weightLost += x - y; return x; });
-                    var postPoints = participantLogs[participant.Id].Count();
-                    var postPointsWithPictures = participantLogs[participant.Id].Where(x => x.Photo != null).Count() * 2;
-                    var leaderboardParticipantDto = new LeaderboardParticipantDto
+                    if (participant.ParticipantLogs.Any())
                     {
-                        Name = participant.Name,
-                        Points = postPoints + postPointsWithPictures,
-                        PoundsLost = overallWeightLoss,
-                        GoalTotal = participant.IndividualWeightLossGoal
-                    };
-                    leaderboardParticipants.Add(leaderboardParticipantDto);
+                        var weightLost = 0.0m;
+                        var overallWeightLoss = participantLogs[participant.Id]
+                                            .OrderByDescending(x => x.CurrentWeight)
+                                            .Select(x => x.CurrentWeight)
+                                            .Aggregate((x, y) => { weightLost += x - y; return x; });
+                        var postPoints = participantLogs[participant.Id].Count();
+                        var postPointsWithPictures = participantLogs[participant.Id].Where(x => x.Photo != null).Count() * 2;
+                        var leaderboardParticipantDto = new LeaderboardParticipantDto
+                        {
+                            Name = participant.Name,
+                            Points = postPoints + postPointsWithPictures,
+                            PoundsLost = overallWeightLoss,
+                            GoalTotal = participant.IndividualWeightLossGoal
+                        };
+                        leaderboardParticipants.Add(leaderboardParticipantDto);
+                    }
+                    else
+                    {
+                        var leaderboardParticipantDto = new LeaderboardParticipantDto
+                        {
+                            Name = participant.Name,
+                            Points = 0,
+                            PoundsLost = 0,
+                            GoalTotal = 0
+                        };
+                        leaderboardParticipants.Add(leaderboardParticipantDto);
+                    }
                 }
-                else
+                return leaderboardParticipants.OrderByDescending(x => x.Points).Select((item, index) =>
                 {
-                    var leaderboardParticipantDto = new LeaderboardParticipantDto
-                    {
-                        Name = participant.Name,
-                        Points = 0,
-                        PoundsLost = 0,
-                        GoalTotal = 0
-                    };
-                    leaderboardParticipants.Add(leaderboardParticipantDto);
-                }
+                    item.Place = index + 1;
+                    return item;
+                }).ToList();
             }
-            return leaderboardParticipants.OrderByDescending(x => x.Points).ToList();
+            return new List<LeaderboardParticipantDto>();
         }
     }
 }

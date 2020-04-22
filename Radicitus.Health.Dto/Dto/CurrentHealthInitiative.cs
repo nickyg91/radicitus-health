@@ -15,7 +15,7 @@ namespace Radicitus.Health.Dto.Dto
         public int Goal { get; set; }
         [JsonPropertyName("percentFinished")]
         public decimal PercentFinished
-            => Math.Round(
+            => Leaderboard == null ? 0.0m : Math.Round(
                 Leaderboard.Sum(x => x.PoundsLost) / HealthInitiative.TotalWeightLossGoal, 2);
     }
 }
