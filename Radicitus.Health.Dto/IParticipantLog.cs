@@ -1,3 +1,5 @@
+using System;
+
 namespace Radicitus.Health.Dto
 {
     public interface IParticipantLog
@@ -7,5 +9,6 @@ namespace Radicitus.Health.Dto
         int HealthInitiativeId { get; }
         byte[] Photo { get; }
         decimal CurrentWeight { get; }
+        DateTime DateSubmitted { get; }
     }
 }

@@ -14,5 +14,6 @@ namespace Radicitus.Health.Dto.Dto
         public decimal CurrentWeight { get; set; }
 
         public string PhotoBase64 => Photo != null && Photo.Length > 0 ? Convert.ToBase64String(Photo) : null;
+        public DateTime DateSubmitted { get; set; }
     }
 }

@@ -35,7 +35,7 @@ namespace Radicitus.Health
             });
 
             services.AddScoped<IHealthInitiativeRepository, HealthInitiativeRepository>();
-
+            services.AddScoped<IParticipantLogRepository, ParticipantLogRepository>();
             services.AddControllers();
             // In production, the Vue files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

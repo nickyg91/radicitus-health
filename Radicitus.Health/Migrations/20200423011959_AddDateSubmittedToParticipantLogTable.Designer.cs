@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Radicitus.Health.Data.Contexts;
@@ -9,9 +10,10 @@ using Radicitus.Health.Data.Contexts;
 namespace Radicitus.Health.Migrations
 {
     [DbContext(typeof(RadicitusHealthContext))]
-    partial class RadicitusHealthContextModelSnapshot : ModelSnapshot
+    [Migration("20200423011959_AddDateSubmittedToParticipantLogTable")]
+    partial class AddDateSubmittedToParticipantLogTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

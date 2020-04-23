@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Radicitus.Health.Dto;
@@ -18,6 +19,6 @@ namespace Radicitus.Health.Data.Entities
         public decimal CurrentWeight { get; set; }
         public HealthParticipant HealthParticipant { get; set; }
         public HealthInitiative HealthInitiative { get; set; }
-
+        public DateTime DateSubmitted { get; set; }
     }
 }
