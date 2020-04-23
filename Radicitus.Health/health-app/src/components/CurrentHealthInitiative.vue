@@ -1,3 +1,8 @@
+<style scoped>
+.mt-5 {
+  margin-top: 5px;
+}
+</style>
 <template>
   <section class="section">
     <div v-if="currentInitiative.healthInitiative != undefined" class="container">
@@ -16,7 +21,6 @@
               size="is-large"
               :max="100"
               :value="currentInitiative.percentFinished == undefined ? 0 : currentInitiative.percentFinished"
-              show-value="true"
               format="percent"
             ></b-progress>
           </div>
@@ -27,10 +31,16 @@
           class="is-size-2"
         >{{currentInitiative.goal}} / {{currentInitiative.healthInitiative.totalWeightLossGoal}}</h1>
       </div>
-      <div class="has-text-centered container">
+      <div class="mt-5 has-text-centered container">
         <h1 class="is-size-1">Leaderboards</h1>
       </div>
-      <div class="table-container">
+      <div class="mt-5 container has-text-centered">
+        <button
+          @click="onCheckinClicked"
+          class="button is-full is-large is-success"
+        >Click here to submit weekly check-in</button>
+      </div>
+      <div class="mt-5 table-container">
         <div class="is-offset-one-third is-one-third">
           <table class="table table-light is-fullwidth">
             <thead>
@@ -65,12 +75,35 @@ import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import LeaderboardService from '@/services/leaderboard/leaderboard.service';
 import CurrentHealthInitiative from '../models/current-initiative.model';
-@Component
+import Participant from '../models/participant.model';
+import ParticipantsService from '@/services/leaderboard/participants.service';
+import CheckIn from '@/components/CheckIn.vue';
+
+@Component({
+  components: {
+    CheckIn
+  }
+})
 export default class CurrentHealthInititative extends Vue {
   private service = new LeaderboardService();
+  private participantsService = new ParticipantsService();
   public currentInitiative = new CurrentHealthInitiative();
+  public participants = new Array<Participant>();
   async mounted() {
     this.currentInitiative = await this.service.getCurrentLeaderboard();
+    this.participants = await this.participantsService.getParticipantsForInitiative(this.currentInitiative.healthInitiative.id);
+  }
+
+  public onCheckinClicked() {
+    this.$buefy.modal.open({
+      parent: this,
+      component: CheckIn,
+      props: {
+        participants: this.participants,
+        healthInititativeId: this.currentInitiative.healthInitiative.id,
+        trapFocus: true
+      }
+    });
   }
 }
 </script>

@@ -54,6 +54,7 @@ namespace Radicitus.Health.Controllers
                 {
                     Name = dbInitiative.Name,
                     TotalWeightLossGoal = dbInitiative.TotalWeightLossGoal,
+                    Id = dbInitiative.Id
                 },
                 Leaderboard = leaderboard,
                 Goal = (int)leaderboard.Sum(x => x.PoundsLost),
