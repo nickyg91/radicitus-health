@@ -2,6 +2,15 @@
 .header-image {
   width: 8%;
 }
+.bg-photo {
+  background-image: url("~@/assets/header.png");
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 100%;
+}
 // Import Bulma's core
 @import "~bulma/sass/utilities/_all";
 
@@ -135,7 +144,8 @@ $link-focus-border: $primary;
 </style>
 <template>
   <section id="app">
-    <section class="hero is-dark">
+    <section class="hero bg-photo">
+      <div class></div>
       <div class="hero-body">
         <div class="container has-text-centered">
           <img class="header-image" src="@/assets/Logo_Radicitus_White.png" />
