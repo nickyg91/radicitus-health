@@ -26,14 +26,32 @@ namespace Radicitus.Health.Controllers
                 photoBytes = Convert.FromBase64String(model.PhotoBase64);
             }
 
+            var priorLog = await _repo.GetLastParticipantLogForParticipantId(model.ParticipantLog.ParticipantId);
+
             var participantLog = new ParticipantLog
             {
                 CurrentWeight = model.ParticipantLog.CurrentWeight,
                 HealthInitiativeId = model.HealthInitiativeId,
                 ParticipantId = model.ParticipantLog.ParticipantId,
                 Photo = photoBytes,
-                DateSubmitted = DateTime.Now
+                DateSubmitted = DateTime.Now,
+                Points = 1
             };
+
+            if (priorLog != null && priorLog.CurrentWeight > participantLog.CurrentWeight)
+            {
+                participantLog.Points += 1;
+            }
+
+            if (priorLog != null && participantLog.CurrentWeight <= priorLog.HealthParticipant.IndividualWeightLossGoal)
+            {
+                participantLog.Points += 5;
+            }
+
+            if (photoBytes != null)
+            {
+                participantLog.Points += 3;
+            }
 
             await _repo.AddParticipantLog(participantLog);
 

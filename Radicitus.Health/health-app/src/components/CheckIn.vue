@@ -115,6 +115,9 @@ export default class CheckIn extends Vue {
         hasIcon: true,
         position: 'is-bottom-right'
       });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (this.$parent as any).close();
+      this.$emit('checkin-success');
     } catch (error) {
       this.$buefy.notification.open({
         duration: 5000,

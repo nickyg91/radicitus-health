@@ -75,7 +75,7 @@
                 v-bind:key="participant.id + participant.name"
               >
                 <td>{{participant.name}}</td>
-                <td>{{participant.name}}</td>
+                <td>{{participant.individualWeightLossGoal}}</td>
                 <td>
                   <button @click="remove(index)" class="button is-danger">
                     <span class="icon">

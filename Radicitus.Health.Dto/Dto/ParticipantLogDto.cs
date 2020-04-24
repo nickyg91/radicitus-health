@@ -15,5 +15,7 @@ namespace Radicitus.Health.Dto.Dto
 
         public string PhotoBase64 => Photo != null && Photo.Length > 0 ? Convert.ToBase64String(Photo) : null;
         public DateTime DateSubmitted { get; set; }
+
+        public byte Points { get; set; }
     }
 }

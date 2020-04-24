@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -114,19 +115,22 @@ namespace Radicitus.Health.Controllers
                 {
                     if (participant.ParticipantLogs.Any())
                     {
-                        var weightLost = 0.0m;
+                        var lostWeight = 0.0m;
                         var overallWeightLoss = participantLogs[participant.Id]
                                             .OrderByDescending(x => x.CurrentWeight)
                                             .Select(x => x.CurrentWeight)
-                                            .Aggregate((x, y) => { weightLost += x - y; return x; });
-                        var postPoints = participantLogs[participant.Id].Count();
-                        var postPointsWithPictures = participantLogs[participant.Id].Where(x => x.Photo != null).Count() * 2;
+                                            .Aggregate(participant.StartingWeight, (total, next) =>
+                                            {
+                                                lostWeight += total - next;
+                                                return next;
+                                            });
+                        var postPoints = participantLogs[participant.Id].Sum(x => x.Points);
                         var leaderboardParticipantDto = new LeaderboardParticipantDto
                         {
                             Name = participant.Name,
-                            Points = postPoints + postPointsWithPictures,
-                            PoundsLost = overallWeightLoss,
-                            GoalTotal = participant.IndividualWeightLossGoal
+                            Points = postPoints,
+                            PoundsLost = lostWeight,
+                            PercentTowardsGoal = Math.Round((lostWeight / (participant.StartingWeight - participant.IndividualWeightLossGoal)) * 100)
                         };
                         leaderboardParticipants.Add(leaderboardParticipantDto);
                     }
@@ -137,7 +141,7 @@ namespace Radicitus.Health.Controllers
                             Name = participant.Name,
                             Points = 0,
                             PoundsLost = 0,
-                            GoalTotal = 0
+                            PercentTowardsGoal = 0
                         };
                         leaderboardParticipants.Add(leaderboardParticipantDto);
                     }

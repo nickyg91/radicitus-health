@@ -8,6 +8,6 @@ export default class CurrentHealthInitiative {
     }
     public healthInitiative!: HealthInitiative;
     public leaderboard!: Array<LeaderboardEntry>;
-    public goal!: number;
+    public poundsLost!: number;
     public percentFinished!: number;
 }

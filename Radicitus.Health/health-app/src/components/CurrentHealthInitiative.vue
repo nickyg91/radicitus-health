@@ -19,8 +19,8 @@
             <b-progress
               type="is-success"
               size="is-large"
-              :max="100"
-              :value="currentInitiative.percentFinished == undefined ? 0 : currentInitiative.percentFinished"
+              :max="currentInitiative.healthInitiative.totalWeightLossGoal"
+              :value="currentInitiative.goal"
               format="percent"
             ></b-progress>
           </div>
@@ -102,6 +102,11 @@ export default class CurrentHealthInititative extends Vue {
         participants: this.participants,
         healthInititativeId: this.currentInitiative.healthInitiative.id,
         trapFocus: true
+      },
+      events: {
+        'checkin-success': async () => {
+          this.currentInitiative = await this.service.getCurrentLeaderboard();
+        }
       }
     });
   }

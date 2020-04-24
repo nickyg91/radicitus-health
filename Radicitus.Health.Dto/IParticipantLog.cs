@@ -10,5 +10,6 @@ namespace Radicitus.Health.Dto
         byte[] Photo { get; }
         decimal CurrentWeight { get; }
         DateTime DateSubmitted { get; }
+        byte Points { get; }
     }
 }

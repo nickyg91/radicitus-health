@@ -22,6 +22,14 @@ namespace Radicitus.Health.Data.Repositories.Implementations
             await _context.SaveChangesAsync();
         }
 
+        public async Task<ParticipantLog> GetLastParticipantLogForParticipantId(int id)
+        {
+            return await _context.ParticipantLogs
+                .Include(x => x.HealthParticipant)
+                .Where(x => x.ParticipantId == id)
+                .OrderByDescending(x => x.DateSubmitted).FirstOrDefaultAsync();
+        }
+
         public async Task<List<ParticipantLog>> GetParticipantLogsByInitiativeId(int id)
         {
             return await _context.ParticipantLogs.Where(x => x.HealthInitiativeId == id).ToListAsync();

@@ -20,5 +20,6 @@ namespace Radicitus.Health.Data.Entities
         public HealthParticipant HealthParticipant { get; set; }
         public HealthInitiative HealthInitiative { get; set; }
         public DateTime DateSubmitted { get; set; }
+        public byte Points { get; set; }
     }
 }

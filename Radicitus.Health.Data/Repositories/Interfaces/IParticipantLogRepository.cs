@@ -8,5 +8,6 @@ namespace Radicitus.Health.Data.Repositories.Interfaces
     {
         Task AddParticipantLog(ParticipantLog log);
         Task<List<ParticipantLog>> GetParticipantLogsByInitiativeId(int id);
+        Task<ParticipantLog> GetLastParticipantLogForParticipantId(int id);
     }
 }
