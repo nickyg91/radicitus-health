@@ -2,14 +2,19 @@
 .header-image {
   width: 8%;
 }
+
+.has-background-image {
+  position: relative;
+  overflow: hidden;
+}
+
 .bg-photo {
-  background-image: url("~@/assets/header.png");
-  filter: blur(8px);
-  -webkit-filter: blur(8px);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
+  object-fit: cover;
+  object-position: center center;
+  position: absolute;
   height: 100%;
+  width: 100%;
+  opacity: 0.3;
 }
 // Import Bulma's core
 @import "~bulma/sass/utilities/_all";
@@ -144,8 +149,43 @@ $link-focus-border: $primary;
 </style>
 <template>
   <section id="app">
-    <section class="hero bg-photo">
-      <div class></div>
+    <section class="hero is-success is-small has-background-image">
+      <img class="bg-photo" src="@/assets/header.png" />
+      <div class="hero-head">
+        <nav class="navbar">
+          <div class="navbar-brand">
+            <a
+              v-bind:class="{'is-active': isMenuOpen}"
+              @click="isOpen"
+              role="button"
+              class="navbar-burger burger"
+              aria-label="menu"
+              aria-expanded="false"
+            >
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+            </a>
+          </div>
+          <div class="navbar-menu" v-bind:class="{'is-active': isMenuOpen}">
+            <div class="navbar-end">
+              <router-link class="navbar-item" active-class="is-active" to="/" exact>Point System</router-link>
+              <router-link
+                class="navbar-item"
+                active-class="is-active"
+                to="/initiatives"
+                exact
+              >Initiatives</router-link>
+              <router-link
+                class="navbar-item"
+                active-class="is-active"
+                to="/resources"
+                exact
+              >Resources</router-link>
+            </div>
+          </div>
+        </nav>
+      </div>
       <div class="hero-body">
         <div class="container has-text-centered">
           <img class="header-image" src="@/assets/Logo_Radicitus_White.png" />
@@ -153,43 +193,19 @@ $link-focus-border: $primary;
         </div>
       </div>
     </section>
-    <nav class="navbar has-background-success" role="navigation">
-      <div class="navbar-brand">
-        <img class="navbar-item" width="72" height="28" src="@/assets/Logo_Radicitus_White.png" />
-        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false">
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-        </a>
-      </div>
-      <div class="navbar-menu">
-        <div class="navbar-start">
-          <router-link
-            class="is-expanded navbar-item is-size-4 is-one-third"
-            :active="'is-active'"
-            to="/"
-          >Point System</router-link>
-          <router-link
-            class="navbar-item is-size-4 is-one-third"
-            :active="'is-active'"
-            to="/initiatives"
-          >Initiatives</router-link>
-          <router-link
-            class="navbar-item is-size-4 is-one-third"
-            :active="'is-active'"
-            to="/initiatives"
-          >Resources</router-link>
-        </div>
-
-        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-        </a>
-      </div>
-    </nav>
     <section class="section">
       <router-view />
     </section>
   </section>
 </template>
+<script lang="ts">
+import Vue from 'vue';
+import { Component } from 'vue-property-decorator';
+@Component
+export default class App extends Vue {
+  public isMenuOpen = false;
+  public isOpen() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+}
+</script>
