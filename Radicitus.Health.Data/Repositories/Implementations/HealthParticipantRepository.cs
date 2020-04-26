@@ -19,7 +19,9 @@ namespace Radicitus.Health.Data.Repositories.Implementations
 
         public async Task<List<HealthParticipant>> GetHealthParticipantsByInitiativeId(int id)
         {
-            return await _context.HealthParticipants.Where(x => x.HealthInitiativeId == id).ToListAsync();
+            return await _context.HealthParticipants
+                .Include(x => x.ParticipantLogs)
+                .Where(x => x.HealthInitiativeId == id).ToListAsync();
         }
     }
 }

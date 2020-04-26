@@ -2,7 +2,9 @@
 .header-image {
   width: 8%;
 }
-
+.width-zero {
+  width: 0px;
+}
 .has-background-image {
   position: relative;
   overflow: hidden;

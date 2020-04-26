@@ -24,7 +24,15 @@ namespace Radicitus.Health.Controllers
             var participants = (await _repo.GetHealthParticipantsByInitiativeId(id)).Select(x => new HealthParticipantDto
             {
                 Name = x.Name,
-                Id = x.Id
+                Id = x.Id,
+                ParticipantLogs = x.ParticipantLogs != null ? x.ParticipantLogs.Select(y => new ParticipantLogDto
+                {
+                    CurrentWeight = y.CurrentWeight,
+                    DateSubmitted = y.DateSubmitted,
+                    Photo = y.Photo,
+                    Points = y.Points,
+                    Id = y.Id
+                }).OrderBy(y => y.DateSubmitted).ToList() : new List<ParticipantLogDto>()
             });
             return Ok(participants);
         }

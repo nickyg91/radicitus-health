@@ -1,4 +1,3 @@
-
 import Axios from 'axios';
 import CheckInModel from '../../models/check-in.model';
 

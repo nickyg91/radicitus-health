@@ -4,4 +4,6 @@ export default class ParticipantLog {
     public healthInitiativeId!: number;
     public currentWeight!: number;
     public photoBase64?: string;
+    public dateSubmitted!: Date;
+    public points!: number;
 }

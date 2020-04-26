@@ -14,6 +14,7 @@
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Total Weight Loss Goal</th>
+                <th class="width-zero"></th>
               </tr>
             </thead>
             <tbody>
@@ -23,9 +24,18 @@
                 <td>{{initiative.startDateTime | date}}</td>
                 <td>{{initiative.endDateTime | date}}</td>
                 <td>{{initiative.totalWeightLossGoal}} lbs.</td>
+                <td>
+                  <button @click="viewLogs(initiative.id)" class="button is-outline is-primary">
+                    <span class="icon">
+                      <i class="fas fa-eye"></i>
+                    </span>
+                    <span>View Logs</span>
+                  </button>
+                </td>
               </tr>
             </tbody>
           </table>
+          <b-loading :active.sync="isLoading"></b-loading>
         </div>
       </div>
     </div>
@@ -34,10 +44,30 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator'
-import HealthInitiative from '../models/initiative.model';
+import HealthInitiative from '../models/initiative.model'
+import Participant from '@/models/participant.model';
+import ParticipantsService from '../services/leaderboard/participants.service';
 @Component
 export default class ViewAdminHealthInitiatives extends Vue {
   @Prop({ default: () => { new Array<HealthInitiative>() } })
   healthInitiatives!: Array<HealthInitiative>;
+  private participantsService = new ParticipantsService();
+  public participantLogs!: Array<Participant>;
+  public isLoading = false;
+  public isViewingLogs = false;
+  public async viewLogs(id: number) {
+    this.isLoading = true;
+    try {
+      this.participantLogs = await this.participantsService.getParticipantsForInitiative(id);
+      this.isViewingLogs = true;
+      this.$emit('viewing-logs', { 'isViewingLogs': this.isViewingLogs, 'participants': this.participantLogs });
+    } catch (exception) {
+      this.$buefy.notification.open({
+        message: 'An error occurred while getting the logs for this initiative.',
+        type: 'is-danger'
+      });
+    }
+    this.isLoading = false;
+  }
 }   
 </script>
