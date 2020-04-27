@@ -59,6 +59,5 @@ export default class InitiativeLogs extends Vue {
 
   @Prop({ default: () => new Array<Participant>() })
   public participants!: Array<Participant>;
-
 }
 </script>

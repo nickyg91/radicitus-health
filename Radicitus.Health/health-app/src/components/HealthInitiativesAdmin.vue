@@ -1,7 +1,20 @@
+<style scoped>
+.mt-5 {
+  margin-top: 5px;
+}
+</style>
 <template>
   <section class="section">
     <div v-if="isViewingLogs">
-      <initiative-logs :participants="participants"></initiative-logs>
+      <div class="container has-text-left">
+        <button @click="backClicked" class="button is-primary is-outlined">
+          <span class="icon">
+            <i class="fas fa-arrow-left"></i>
+          </span>
+          <span>Back</span>
+        </button>
+      </div>
+      <initiative-logs class="mt-5" :participants="participants"></initiative-logs>
     </div>
     <div v-if="!isViewingLogs">
       <b-tabs v-model="activeTab" class="block" position="is-centered">
@@ -48,6 +61,10 @@ export default class HealthInitiativesAdmin extends Vue {
   }
   async refresh() {
     this.initiatives = await this.service.getInitiatives();
+  }
+
+  public backClicked() {
+    this.isViewingLogs = false;
   }
 
   public logsViewed($event: Logs) {

@@ -171,13 +171,13 @@ $link-focus-border: $primary;
           </div>
           <div class="navbar-menu" v-bind:class="{'is-active': isMenuOpen}">
             <div class="navbar-end">
-              <router-link class="navbar-item" active-class="is-active" to="/" exact>Point System</router-link>
               <router-link
                 class="navbar-item"
                 active-class="is-active"
-                to="/initiatives"
+                to="/points"
                 exact
-              >Initiatives</router-link>
+              >Point System</router-link>
+              <router-link class="navbar-item" active-class="is-active" to="/players" exact>Players</router-link>
               <router-link
                 class="navbar-item"
                 active-class="is-active"
