@@ -2,6 +2,9 @@
 .has-margin-top {
   margin-top: 5px;
 }
+.zero-width {
+  width: 0px;
+}
 </style>
 <template>
   <div class="box">
@@ -66,7 +69,7 @@
               <tr>
                 <th>Participant</th>
                 <th>Goal</th>
-                <th></th>
+                <th class="zero-width"></th>
               </tr>
             </thead>
             <tbody>
@@ -101,7 +104,7 @@
     <b-modal :active.sync="isAddParticipantModalShown">
       <add-participant-modal
         v-bind:participants="initiative.participants"
-        v-on:add-ok-clicked="modalOkClicked"
+        v-on:add-ok-clicked="modalOkClicked($event)"
       ></add-participant-modal>
     </b-modal>
   </div>
@@ -119,11 +122,11 @@ import Participant from '@/models/participant.model';
   }
 })
 export default class CreateHealthInitiative extends Vue {
-  private initiative: HealthInitiative = new HealthInitiative();
+  public initiative: HealthInitiative = new HealthInitiative();
   private service = new AdminService();
   public isLoading = false;
   public isAddParticipantModalShown = false;
-  async submit() {
+  public async submit() {
     try {
       this.isLoading = true;
       await this.service.createInitative(this.initiative);
@@ -148,20 +151,28 @@ export default class CreateHealthInitiative extends Vue {
       this.isLoading = false;
     }
   }
-  showAddParticipantModal() {
+  public showAddParticipantModal() {
     this.isAddParticipantModalShown = true;
   }
-  modalOkClicked(participants: Array<Participant>) {
+  public modalOkClicked(participants: Array<Participant>) {
+    if (!this.initiative.participants) {
+      this.initiative.participants = new Array<Participant>();
+    }
     this.initiative.participants = participants;
     this.isAddParticipantModalShown = false;
   }
-  validInitiative() {
+  public validInitiative() {
     return this.initiative.name
       && this.initiative.totalWeightLossGoal
       && this.initiative.startDateTime
       && this.initiative.endDateTime
       && this.initiative.participants
       && this.initiative.participants.length > 0;
+  }
+  public remove(index: number) {
+    if (this.initiative.participants) {
+      this.initiative.participants.splice(index, 1);
+    }
   }
 }
 </script>
