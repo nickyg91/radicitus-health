@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Radicitus.Health.Data.Repositories.Interfaces;
+using Radicitus.Health.Dto;
 using Radicitus.Health.Dto.Dto;
+using Radicitus.Health.Models;
 
 namespace Radicitus.Health.Controllers
 {
@@ -35,6 +37,14 @@ namespace Radicitus.Health.Controllers
                 }).OrderBy(y => y.DateSubmitted).ToList() : new List<ParticipantLogDto>()
             });
             return Ok(participants);
+        }
+
+        [HttpPatch("update/{id:int}")]
+        public async Task<IActionResult> UpdateParticipants(int id, [FromBody]UpdateParticipantsModel model)
+        {
+            await _repo.RemoveParticipants(model.RemovedParticipants.Select(x => x.Id).ToList());
+            await _repo.UpdateParticipants(model.UpdatedParticipants.ToList<IHealthParticipant>(), id);
+            return Ok();
         }
     }
 }
