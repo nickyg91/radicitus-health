@@ -151,3 +151,6 @@ Copyright &copy; 2018 - 2020 [Software Ateliers](https://github.com/SoftwareAtel
 ## Where to find me
 
 Medium: [Software Ateliers](https://medium.com/software-ateliers) | Twitter: [@SAteliers](https://twitter.com/SAteliers)
+
+## Glo board
+https://app.gitkraken.com/glo/board/XpN5JutouAApOGsh
