@@ -15,6 +15,7 @@
                 <th>End Date</th>
                 <th>Total Weight Loss Goal</th>
                 <th class="width-zero"></th>
+                <th class="width-zero"></th>
               </tr>
             </thead>
             <tbody>
@@ -25,11 +26,19 @@
                 <td>{{initiative.endDateTime | date}}</td>
                 <td>{{initiative.totalWeightLossGoal}} lbs.</td>
                 <td>
-                  <button @click="viewLogs(initiative.id)" class="button is-outline is-primary">
+                  <button @click="viewLogs(initiative.id)" class="button is-outlined is-primary">
                     <span class="icon">
                       <i class="fas fa-eye"></i>
                     </span>
                     <span>View Logs</span>
+                  </button>
+                </td>
+                <td>
+                  <button class="button is-outlined is-info">
+                    <span class="icon">
+                      <i class="fas fa-edit"></i>
+                    </span>
+                    <span>Edit</span>
                   </button>
                 </td>
               </tr>
