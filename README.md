@@ -1,7 +1,7 @@
 ﻿
 # Radicitus Health specific setup
 
-![Docker Image CI](https://github.com/nickyg91/radicitus-health/workflows/Docker%20Image%20CI/badge.svg)
+![Build Docker Image](https://github.com/nickyg91/radicitus-health/workflows/Docker%20Image%20CI/badge.svg)
 
 In order to run the database, you must first have a postgres instance running either in docker or natively.
 Run the following docker command to start up an instance.
