@@ -1,10 +1,24 @@
-﻿# ASP.NET Core Vue Starter
+﻿
+# Radicitus Health specific setup
+
+![Docker Image CI](https://github.com/nickyg91/radicitus-health/workflows/Docker%20Image%20CI/badge.svg)
+
+In order to run the database, you must first have a postgres instance running either in docker or natively.
+Run the following docker command to start up an instance.
+
+```bash docker run --restart unless-stopped -v %my-created-volume%  --name radicitus-health -p 5432:5432  -e POSTGRES_PASSWORD='strong password' -d postgres```
+Once you have a database running, run the EF migrations by installing the .net core cli EF migrations tool by running:
+```bash dotnet tool install --global dotnet-ef```
+Once installed, run the following command in the Radicitus.Health project: dotnet ef database update.
+This should get you a blank database to start with.
+
+ 
+ # ASP.NET Core Vue Starter
 
 The repository contains an ASP.&#8203;NET Core + Vue.js starter template. The template runs on ASP.NET Core 3.1 and is created by Vue CLI 4.0 with a new plugin based architecture allowing developers to interactively scaffold a new project with just a one command.
 
 Original article how to create the starter template is available [here](https://medium.com/software-ateliers/asp-net-core-vue-template-with-custom-configuration-using-cli-3-0-8288e18ae80b).
 
-[![Nuget](https://img.shields.io/nuget/v/SoftwareAteliers.Radicitus.Health.svg?style=flat&color=2196f3)](https://www.nuget.org/packages/SoftwareAteliers.Radicitus.Health/)
 
 > For ASP.NET Core 2.2 template use [release v1.1.0](https://github.com/SoftwareAteliers/asp-net-core-vue-starter/releases/tag/1.1.0)
 
@@ -131,16 +145,6 @@ Special thanks to everyone who helped and contributed to this project!
 * [@Ibrahim-Islam](https://github.com/Ibrahim-Islam)
 
 ---
-
-## Radicitus Health specific setup
-
-In order to run the database, you must first have a postgres instance running either in docker or natively.
-Run the following docker command to start up an instance.
-docker run --restart unless-stopped -v %my-created-volume%  --name radicitus-health -p 5432:5432  -e POSTGRES_PASSWORD='strong password' -d postgres
-Once you have a database running, run the EF migrations by installing the .net core cli EF migrations tool by running dotnet tool install --global dotnet-ef
-Once installed, run the following command in the Radicitus.Health project: dotnet ef database update.
-This should get you a blank database to start with.
-
 
 ## License
 
