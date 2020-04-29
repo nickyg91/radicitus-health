@@ -16,16 +16,7 @@ namespace Radicitus.Health
         {
             return WebHost.CreateDefaultBuilder(args)
                 .UseKestrel()
-                .UseStartup<Startup>()
-                .ConfigureAppConfiguration((hostingContext, config) =>
-                {
-                    if (hostingContext.HostingEnvironment.IsProduction())
-                    {
-                        var dom = new ConfigurationBuilder()
-                        .SetBasePath(hostingContext.HostingEnvironment.ContentRootPath)
-                        .AddJsonFile("~/opt/appsettings/radicitus-health/appsettings.json", optional: false);
-                    }
-                });
+                .UseStartup<Startup>();
         }
 
     }

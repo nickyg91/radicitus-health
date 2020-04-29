@@ -14,8 +14,9 @@ RUN apt-get update -yq
 RUN apt-get install curl gnupg -yq 
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get install -y nodejs
-RUN dotnet tool install --global dotnet-ef
-RUN dotnet ef migrations script -o migrations.sql
+#RUN dotnet tool install --global dotnet-ef
+#RUN export PATH="$PATH:/root/.dotnet/tools"
+#RUN dotnet ef migrations script -o migrations.sql -p "/src/Radicitus.Health/Radicitus.Health.csproj"
 RUN dotnet build "/src/Radicitus.Health/Radicitus.Health.csproj" -c Release -o /app/build
 
 

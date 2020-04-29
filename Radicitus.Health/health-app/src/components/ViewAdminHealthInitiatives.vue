@@ -15,6 +15,7 @@
                 <th>End Date</th>
                 <th>Total Weight Loss Goal</th>
                 <th class="width-zero"></th>
+                <th class="width-zero"></th>
               </tr>
             </thead>
             <tbody>
@@ -25,11 +26,19 @@
                 <td>{{initiative.endDateTime | date}}</td>
                 <td>{{initiative.totalWeightLossGoal}} lbs.</td>
                 <td>
-                  <button @click="viewLogs(initiative.id)" class="button is-outline is-primary">
+                  <button @click="viewLogs(initiative.id)" class="button is-outlined is-primary">
                     <span class="icon">
                       <i class="fas fa-eye"></i>
                     </span>
                     <span>View Logs</span>
+                  </button>
+                </td>
+                <td>
+                  <button @click="showEditPopup(initiative)" class="button is-outlined is-info">
+                    <span class="icon">
+                      <i class="fas fa-edit"></i>
+                    </span>
+                    <span>Edit Participants</span>
                   </button>
                 </td>
               </tr>
@@ -47,7 +56,12 @@ import { Component, Prop } from 'vue-property-decorator'
 import HealthInitiative from '../models/initiative.model'
 import Participant from '@/models/participant.model';
 import ParticipantsService from '../services/leaderboard/participants.service';
-@Component
+import EditParticipantModal from '@/components/EditParticipantModal.vue';
+@Component({
+  components: {
+    EditParticipantModal
+  }
+})
 export default class ViewAdminHealthInitiatives extends Vue {
   @Prop({ default: () => { new Array<HealthInitiative>() } })
   healthInitiatives!: Array<HealthInitiative>;
@@ -68,6 +82,22 @@ export default class ViewAdminHealthInitiatives extends Vue {
       });
     }
     this.isLoading = false;
+  }
+  public showEditPopup(healthInitiative: HealthInitiative) {
+    this.$buefy.modal.open({
+      component: EditParticipantModal,
+      parent: this,
+      events: {
+        'refresh': () => this.$emit('refresh-initiatives')
+      },
+      props: {
+        id: healthInitiative.id,
+        participants: healthInitiative.participants
+      },
+      onCancel: () => {
+        this.$emit('refresh-initiatives');
+      },
+    });
   }
 }   
 </script>

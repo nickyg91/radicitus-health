@@ -19,7 +19,7 @@
               v-bind:label="log.dateSubmitted | date"
             >
               <div class="columns max-height">
-                <div class="column is-offset-one-third">
+                <div class="column is-offset-one-fifth">
                   <div class="card">
                     <div class="card-image" v-if="log.photoBase64">
                       <figure class="image is-square">

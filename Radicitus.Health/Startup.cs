@@ -14,9 +14,20 @@ namespace Radicitus.Health
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
-            Configuration = configuration;
+            if (env.IsDevelopment())
+            {
+                Configuration = configuration;
+            }
+            if (env.IsProduction())
+            {
+                var builder = new ConfigurationBuilder()
+                    .SetBasePath("/opt/appsettings/radicitus-health")
+                    .AddJsonFile($"appsettings.json", optional: true, reloadOnChange: true)
+                    .AddEnvironmentVariables();
+                Configuration = builder.Build();
+            }
         }
 
         public IConfiguration Configuration { get; }
