@@ -27,7 +27,7 @@ namespace Radicitus.Health.Data.Repositories.Implementations
 
         public async Task RemoveParticipants(List<int> participantIds)
         {
-            var participants = await _context.HealthParticipants.Join(participantIds, x => x.Id, y => y, (x, y) => x).ToListAsync();
+            var participants = _context.HealthParticipants.AsEnumerable().Join(participantIds, x => x.Id, y => y, (x, y) => x).ToList();
             _context.HealthParticipants.RemoveRange(participants);
             await _context.SaveChangesAsync();
         }

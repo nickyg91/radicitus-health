@@ -77,6 +77,7 @@ namespace Radicitus.Health.Controllers
                         HealthInitiativeId = y.HealthInitiativeId,
                         Name = y.Name,
                         IndividualWeightLossGoal = y.IndividualWeightLossGoal,
+                        StartingWeight = y.StartingWeight,
                         Id = y.Id
                     };
                 });

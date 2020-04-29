@@ -20,6 +20,7 @@
       <b-tabs v-model="activeTab" class="block" position="is-centered">
         <b-tab-item label="View">
           <view-admin-health-initiatives
+            v-on:refresh-initiatives="refresh"
             v-on:viewing-logs="logsViewed($event)"
             v-bind:healthInitiatives="initiatives"
           ></view-admin-health-initiatives>
@@ -59,7 +60,8 @@ export default class HealthInitiativesAdmin extends Vue {
   async mounted() {
     this.initiatives = await this.service.getInitiatives();
   }
-  async refresh() {
+
+  public async refresh() {
     this.initiatives = await this.service.getInitiatives();
   }
 

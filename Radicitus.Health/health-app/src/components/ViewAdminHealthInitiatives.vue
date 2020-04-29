@@ -34,11 +34,11 @@
                   </button>
                 </td>
                 <td>
-                  <button class="button is-outlined is-info">
+                  <button @click="showEditPopup(initiative)" class="button is-outlined is-info">
                     <span class="icon">
                       <i class="fas fa-edit"></i>
                     </span>
-                    <span>Edit</span>
+                    <span>Edit Participants</span>
                   </button>
                 </td>
               </tr>
@@ -56,7 +56,12 @@ import { Component, Prop } from 'vue-property-decorator'
 import HealthInitiative from '../models/initiative.model'
 import Participant from '@/models/participant.model';
 import ParticipantsService from '../services/leaderboard/participants.service';
-@Component
+import EditParticipantModal from '@/components/EditParticipantModal.vue';
+@Component({
+  components: {
+    EditParticipantModal
+  }
+})
 export default class ViewAdminHealthInitiatives extends Vue {
   @Prop({ default: () => { new Array<HealthInitiative>() } })
   healthInitiatives!: Array<HealthInitiative>;
@@ -77,6 +82,22 @@ export default class ViewAdminHealthInitiatives extends Vue {
       });
     }
     this.isLoading = false;
+  }
+  public showEditPopup(healthInitiative: HealthInitiative) {
+    this.$buefy.modal.open({
+      component: EditParticipantModal,
+      parent: this,
+      events: {
+        'refresh': () => this.$emit('refresh-initiatives')
+      },
+      props: {
+        id: healthInitiative.id,
+        participants: healthInitiative.participants
+      },
+      onCancel: () => {
+        this.$emit('refresh-initiatives');
+      },
+    });
   }
 }   
 </script>
