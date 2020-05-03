@@ -31,8 +31,11 @@ namespace Radicitus.Health.Controllers
 
             if (priorLog != null)
             {
-                var dateDiffInDays = (currentDate - priorLog.DateSubmitted).Days;
-                if (dateDiffInDays < 7)
+                var sunday = DayOfWeek.Sunday;
+                var saturday = DayOfWeek.Saturday;
+                var sundayOfThisWeek = currentDate.Date.AddDays(sunday - currentDate.DayOfWeek);
+                var saturdayOfThisWeek = currentDate.Date.AddDays(saturday - currentDate.DayOfWeek);
+                if (priorLog.DateSubmitted >= sundayOfThisWeek && priorLog.DateSubmitted <= saturdayOfThisWeek)
                 {
                     return BadRequest("You may not submit more than once a week.");
                 }
