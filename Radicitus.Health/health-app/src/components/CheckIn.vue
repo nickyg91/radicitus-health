@@ -119,13 +119,23 @@ export default class CheckIn extends Vue {
       (this.$parent as any).close();
       this.$emit('checkin-success');
     } catch (error) {
-      this.$buefy.notification.open({
-        duration: 5000,
-        message: 'An error has ocurred while attempting to create the your check-in!',
-        type: 'is-danger',
-        hasIcon: true,
-        position: 'is-bottom-right'
-      });
+      if (error.response.status === 400) {
+        this.$buefy.notification.open({
+          duration: 5000,
+          message: error.response.data,
+          type: 'is-danger',
+          hasIcon: true,
+          position: 'is-bottom-right'
+        });
+      } else {
+        this.$buefy.notification.open({
+          duration: 5000,
+          message: 'An error has ocurred while attempting to create the your check-in!',
+          type: 'is-danger',
+          hasIcon: true,
+          position: 'is-bottom-right'
+        });
+      }
     }
     this.isLoading = false;
   }
