@@ -27,6 +27,19 @@ namespace Radicitus.Health.Controllers
             }
 
             var priorLog = await _repo.GetLastParticipantLogForParticipantId(model.ParticipantLog.ParticipantId);
+            var currentDate = DateTime.Now;
+
+            if (priorLog != null)
+            {
+                var sunday = DayOfWeek.Sunday;
+                var saturday = DayOfWeek.Saturday;
+                var sundayOfThisWeek = currentDate.Date.AddDays(sunday - currentDate.DayOfWeek);
+                var saturdayOfThisWeek = currentDate.Date.AddDays(saturday - currentDate.DayOfWeek);
+                if (priorLog.DateSubmitted >= sundayOfThisWeek && priorLog.DateSubmitted <= saturdayOfThisWeek)
+                {
+                    return BadRequest("You may not submit more than once a week.");
+                }
+            }
 
             var participantLog = new ParticipantLog
             {
