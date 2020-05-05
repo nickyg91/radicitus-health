@@ -10,7 +10,7 @@ namespace Radicitus.Health.Dto.Dto
         public string Url { get; set; }
         [JsonPropertyName("description")]
         public string Description { get; set; }
-        [JsonPropertyName("Name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
         [JsonPropertyName("tags")]
         public List<string> Tags { get; set; }

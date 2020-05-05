@@ -29,6 +29,7 @@ namespace Radicitus.Health.Controllers
         [HttpPost("submit")]
         public async Task<IActionResult> Submit(ResourceItem item)
         {
+            item.Guid = Guid.NewGuid();
             await _repo.StoreResourceItem(item);
             return Ok();
         }

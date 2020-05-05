@@ -3,9 +3,10 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import buefy from 'buefy'
-import Axios from 'axios'
+import axios from 'axios'
 import '@fortawesome/fontawesome-free/css/all.css'
 import moment from 'moment';
+
 
 Vue.use(buefy, {
   defaultIconPack: 'fas'
@@ -16,9 +17,14 @@ Vue.filter('date', (value: string) => {
 });
 
 Vue.config.productionTip = false
-Axios.defaults.headers.common['content-type'] = 'application/json'
+const axiosConfig = axios.create({
+  headers: {
+    'content-type': 'application/json'
+  }
+})
+Vue.prototype.$http = axiosConfig;
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
 }).$mount('#app')
