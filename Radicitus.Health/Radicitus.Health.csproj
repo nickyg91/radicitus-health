@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Radicitus.Health.Data\Radicitus.Health.Data.csproj"/>
+    <ProjectReference Include="..\Radicitus.Health.Redis\Radicitus.Health.Redis.csproj"/>
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <Exec Command="node --version" ContinueOnError="true">
