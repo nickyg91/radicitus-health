@@ -18,6 +18,14 @@
   width: 100%;
   opacity: 0.3;
 }
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
 // Import Bulma's core
 @import "~bulma/sass/utilities/_all";
 
@@ -220,7 +228,14 @@ $link-focus-border: $primary;
       </div>
     </div>
     <section class="section">
-      <router-view />
+      <transition
+        name="fade"
+        enter-active-class="fade-enter-active"
+        leave-active-class="fade-leave-active"
+        mode="out-in"
+      >
+        <router-view />
+      </transition>
     </section>
   </section>
 </template>
@@ -233,5 +248,6 @@ export default class App extends Vue {
   public isOpen() {
     this.isMenuOpen = !this.isMenuOpen;
   }
+
 }
 </script>
