@@ -1,6 +1,6 @@
 <style lang="scss">
 .header-image {
-  width: 8%;
+  width: 12%;
 }
 .width-zero {
   width: 0px;
@@ -154,7 +154,7 @@ $link-focus-border: $primary;
     <section class="hero is-success is-small has-background-image">
       <img class="bg-photo" src="@/assets/header.png" />
       <div class="hero-head">
-        <nav class="navbar">
+        <nav class="navbar is-hidden-desktop">
           <div class="navbar-brand">
             <a
               v-bind:class="{'is-active': isMenuOpen}"
@@ -164,9 +164,9 @@ $link-focus-border: $primary;
               aria-label="menu"
               aria-expanded="false"
             >
-              <span aria-hidden="true"></span>
-              <span aria-hidden="true"></span>
-              <span aria-hidden="true"></span>
+              <span class="has-text-white" aria-hidden="true"></span>
+              <span class="has-text-white" aria-hidden="true"></span>
+              <span class="has-text-white" aria-hidden="true"></span>
             </a>
           </div>
           <div class="navbar-menu" v-bind:class="{'is-active': isMenuOpen}">
@@ -195,6 +195,30 @@ $link-focus-border: $primary;
         </div>
       </div>
     </section>
+    <div class="has-background-success is-hidden-mobile">
+      <div class="navbar-menu" v-bind:class="{'is-active': isMenuOpen}">
+        <div class="navbar-end">
+          <router-link
+            class="is-tab navbar-item"
+            active-class="is-active has-text-white"
+            to="/points"
+            exact
+          >Point System</router-link>
+          <router-link
+            class="is-tab navbar-item"
+            active-class="is-active has-text-white"
+            to="/players"
+            exact
+          >Players</router-link>
+          <router-link
+            class="is-tab navbar-item"
+            active-class="is-active has-text-white"
+            to="/resources"
+            exact
+          >Resources</router-link>
+        </div>
+      </div>
+    </div>
     <section class="section">
       <router-view />
     </section>

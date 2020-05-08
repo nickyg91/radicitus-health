@@ -35,10 +35,9 @@
         <h1 class="is-size-1">Leaderboards</h1>
       </div>
       <div class="mt-5 container has-text-centered">
-        <button
-          @click="onCheckinClicked"
-          class="button is-full is-large is-success"
-        >Click here to submit weekly check-in</button>
+        <button @click="onCheckinClicked" class="button is-full is-success">
+          <strong>Click here to submit weekly check-in</strong>
+        </button>
       </div>
       <div class="mt-5 table-container">
         <div class="is-offset-one-third is-one-third">
