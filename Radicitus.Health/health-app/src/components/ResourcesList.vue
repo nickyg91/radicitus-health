@@ -1,7 +1,20 @@
 <template>
   <div class="container">
-    <div v-for="resource in resources" :key="resource.guid" class="container">
-      <resource :resource="resource"></resource>
+    <div v-if="resources.length > 0">
+      <div v-for="resource in resources" :key="resource.guid" class="container">
+        <resource :resource="resource"></resource>
+      </div>
+    </div>
+    <div v-else>
+      <div class="is-size-1 has-text-centered">No resources have been added!</div>
+      <div class="has-text-centered">
+        <button class="is-large is-full button is-outlined is-success">
+          <span class="icon">
+            <i class="fas fa-plus"></i>
+          </span>
+          <span>Add</span>
+        </button>
+      </div>
     </div>
   </div>
 </template>
