@@ -8,7 +8,7 @@
     <div v-else>
       <div class="is-size-1 has-text-centered">No resources have been added!</div>
       <div class="has-text-centered">
-        <button class="is-large is-full button is-outlined is-success">
+        <button class="is-medium is-rounded is-full button is-outlined is-success">
           <span class="icon">
             <i class="fas fa-plus"></i>
           </span>
