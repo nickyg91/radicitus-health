@@ -100,7 +100,8 @@ export default class CurrentHealthInititative extends Vue {
       props: {
         participants: this.participants,
         healthInititativeId: this.currentInitiative.healthInitiative.id,
-        trapFocus: true
+        trapFocus: true,
+        canSubmitPicture: this.currentInitiative.canSubmitPicture
       },
       events: {
         'checkin-success': async () => {
