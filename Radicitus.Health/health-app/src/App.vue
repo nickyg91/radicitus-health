@@ -26,6 +26,10 @@
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
+
+.is-nav-centered {
+  margin-left: 42.75%;
+}
 // Import Bulma's core
 @import "~bulma/sass/utilities/_all";
 
@@ -177,7 +181,7 @@ $link-focus-border: $primary;
               <span class="has-text-white" aria-hidden="true"></span>
             </a>
           </div>
-          <div class="navbar-menu" v-bind:class="{'is-active': isMenuOpen}">
+          <div class="navbar-menu">
             <div class="navbar-end">
               <router-link
                 class="navbar-item"
@@ -205,7 +209,7 @@ $link-focus-border: $primary;
     </section>
     <div class="has-background-success is-hidden-mobile">
       <div class="navbar-menu" v-bind:class="{'is-active': isMenuOpen}">
-        <div class="navbar-end">
+        <div class="navbar-start is-nav-centered">
           <router-link
             class="is-tab navbar-item"
             active-class="is-active has-text-white"
