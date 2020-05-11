@@ -19,6 +19,16 @@ namespace Radicitus.Health.Redis.RadicitusRedis
             _db = _connection.Connection.Value.GetDatabase();
         }
 
+        public async Task AddTags(List<string> tags)
+        {
+            var keyExists = await _db.KeyExistsAsync("tags");
+            if (!keyExists)
+            {
+                var vals = tags.Select(x => new RedisValue(x)).ToArray();
+                await _db.SetAddAsync("tags", vals);
+            }
+        }
+
         public async Task<IEnumerable<ResourceItem>> GetAllResourceItems()
         {
             var json = await _db.SetMembersAsync("resources");
@@ -64,5 +74,7 @@ namespace Radicitus.Health.Redis.RadicitusRedis
             }
             await _db.SetAddAsync("resources", json);
         }
+
+
     }
 }

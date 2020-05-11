@@ -3,17 +3,54 @@
     <div class="title">Add Resource</div>
     <div class="modal-content">
       <b-field label="Name">
-        <b-input placeholder="Name" required v-model="model.name" type="text" min="5" max="256"></b-input>
+        <b-input
+          placeholder="Name"
+          required
+          v-model="model.name"
+          type="text"
+          min="5"
+          max="256"
+          validation-message="Name is required."
+        ></b-input>
       </b-field>
-      <b-field>
-        <b-input placeholder="Description">
-          <b-input type="text-area" v-model="model.desription"></b-input>
-        </b-input>
+      <b-field label="Description">
+        <b-input type="textarea" placeholder="Description" v-model="model.desription"></b-input>
       </b-field>
-      <b-field label="Url">
+      <b-field label="Url" placeholder="Link">
         <b-input type="text" v-model="model.url"></b-input>
       </b-field>
-      <b-field></b-field>
+      <b-field label="Tags">
+        <b-taginput
+          v-model="model.tags"
+          :data="filteredTags"
+          autocomplete
+          :allow-new="true"
+          :open-on-focus="true"
+          icon="tag"
+          placeholder="Add a tag"
+          @typing="getFilteredTags"
+          type="is-success"
+        ></b-taginput>
+      </b-field>
+      <p
+        v-if="!model.tags || model.tags.length < 1"
+        class="has-text-danger"
+      >Must have at least one tag selected.</p>
+    </div>
+    <div class="has-margin-top-5 has-text-right">
+      <button class="button is-success">
+        <span class="icon">
+          <i class="fas fa-save"></i>
+        </span>
+        <span>Save</span>
+      </button>
+      &nbsp;
+      <button @click="$parent.close()" class="button is-danger">
+        <span class="icon">
+          <i class="fas fa-ban"></i>
+        </span>
+        <span>Cancel</span>
+      </button>
     </div>
   </div>
 </template>
@@ -28,7 +65,18 @@ export default class AddResourceModal extends Vue {
   private resourceService = new ResourcesService(this.$http);
   public model = new ResourceItem();
   public showPreview = false;
+  public filteredTags = new Array<string>();
+  public tags = new Array<string>();
   public loading = false;
+  async mounted() {
+    const data = await this.resourceService.getAllTags();
+    this.filteredTags = data;
+    this.tags = data;
+  }
+
+  public getFilteredTags(text: string) {
+    this.filteredTags = this.tags.filter(x => x.toLowerCase().indexOf(text.toLowerCase()) > -1);
+  }
   //   public onUrlCompleted(url: string) {
   //     console.log(url);
   //     if (url.length > 0) {

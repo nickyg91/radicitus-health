@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices;
@@ -50,10 +52,11 @@ namespace Radicitus.Health
 
             var redisConnection = new RedisConnection(redisConnectionString);
             redisConnection.Connect();
-            var multiplexer = new RadicitusRedisDataRepository(redisConnection);
+            var repo = new RadicitusRedisDataRepository(redisConnection);
+            repo.AddTags(new List<string> { "Recipes", "Workouts", "Playlists" }).GetAwaiter().GetResult();
             services.AddSingleton<IRadicitusRedisDataRepository, RadicitusRedisDataRepository>((item) =>
             {
-                return multiplexer;
+                return repo;
             });
             services.AddScoped<IHealthInitiativeRepository, HealthInitiativeRepository>();
             services.AddScoped<IParticipantLogRepository, ParticipantLogRepository>();
