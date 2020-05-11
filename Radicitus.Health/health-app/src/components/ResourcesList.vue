@@ -8,7 +8,10 @@
     <div v-else>
       <div class="is-size-1 has-text-centered">No resources have been added!</div>
       <div class="has-text-centered">
-        <button class="is-medium is-rounded is-full button is-outlined is-success">
+        <button
+          @click="addResource"
+          class="is-medium is-rounded is-full button is-outlined is-success"
+        >
           <span class="icon">
             <i class="fas fa-plus"></i>
           </span>
@@ -23,10 +26,12 @@ import Vue from 'vue';
 import ResourcesService from '@/services/resources/resources.service';
 import ResourceItem from '@/models/resource.model';
 import Resource from '@/components/Resource.vue';
+import AddResourceModal from '@/components/AddResourceModal.vue';
 import { Component } from 'vue-property-decorator';
 @Component({
   components: {
-    Resource
+    Resource,
+    AddResourceModal
   }
 })
 export default class ResourcesList extends Vue {
@@ -35,6 +40,14 @@ export default class ResourcesList extends Vue {
 
   async mounted() {
     this.resources = await this.resourcesService.getAllResources();
+  }
+
+  public addResource() {
+    this.$buefy.modal.open({
+      component: AddResourceModal,
+      parent: this,
+      trapFocus: true
+    });
   }
 }
 </script>

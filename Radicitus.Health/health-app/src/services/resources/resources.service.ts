@@ -11,4 +11,13 @@ export default class ResourcesService {
         const response = await this._http.get<ResourceItem[]>('api/resource/all');
         return response.data;
     }
+
+    public async getAllTags(): Promise<Array<string>> {
+        const response = await this._http.get<Array<string>>('api/resource/tags');
+        return response.data;
+    }
+
+    public async submitResource(resource: ResourceItem): Promise<void> {
+        await this._http.post('api/resource/submit', resource);
+    }
 }

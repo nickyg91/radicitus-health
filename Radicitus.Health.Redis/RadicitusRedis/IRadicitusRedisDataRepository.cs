@@ -8,6 +8,7 @@ namespace Radicitus.Health.Redis.RadicitusRedis
     {
         Task StoreResourceItem(ResourceItem item);
         Task<IEnumerable<ResourceItem>> GetAllResourceItems();
-        Task<Dictionary<string, List<ResourceItem>>> GetAllResourceItemsByTags(List<string> tags);
+        Task<List<ResourceItem>> GetAllResourceItemsByTags(List<string> tags);
+        Task<List<string>> GetAllTags();
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -10,7 +11,6 @@ namespace Radicitus.Health.Redis.RadicitusRedis
 {
     public class RadicitusRedisDataRepository : IRadicitusRedisDataRepository
     {
-
         private readonly RedisConnection _connection;
         private readonly IDatabase _db;
         public RadicitusRedisDataRepository(RedisConnection connection)
@@ -18,7 +18,6 @@ namespace Radicitus.Health.Redis.RadicitusRedis
             _connection = connection;
             _db = _connection.Connection.Value.GetDatabase();
         }
-
 
         public async Task<IEnumerable<ResourceItem>> GetAllResourceItems()
         {
@@ -32,26 +31,23 @@ namespace Radicitus.Health.Redis.RadicitusRedis
             return resources;
         }
 
-        public async Task<Dictionary<string, List<ResourceItem>>> GetAllResourceItemsByTags(List<string> tags)
+        public async Task<List<ResourceItem>> GetAllResourceItemsByTags(List<string> tags)
         {
-            var dict = new Dictionary<string, List<ResourceItem>>();
-            foreach (var tag in tags)
+            var items = new List<ResourceItem>();
+            var redisKeys = tags.Select(x => new RedisKey(x)).ToArray();
+            var intersectingTags = await _db.SetCombineAsync(SetOperation.Intersect, redisKeys);
+            foreach (var item in intersectingTags)
             {
-                var members = await _db.SetMembersAsync(tag.ToLower());
-                foreach (var member in members)
-                {
-                    var deserializedMember = JsonSerializer.Deserialize<ResourceItem>(member);
-                    if (!dict.ContainsKey(tag))
-                    {
-                        dict.Add(tag, new List<ResourceItem> { deserializedMember });
-                    }
-                    else
-                    {
-                        dict[tag].Add(deserializedMember);
-                    }
-                }
+                var deserializedMember = JsonSerializer.Deserialize<ResourceItem>(item);
+                items.Add(deserializedMember);
             }
-            return dict;
+            return items;
+        }
+
+        public async Task<List<string>> GetAllTags()
+        {
+            var tags = await _db.SetMembersAsync("tags");
+            return tags.Select(x => x.ToString()).ToList();
         }
 
         public async Task StoreResourceItem(ResourceItem item)
@@ -64,6 +60,7 @@ namespace Radicitus.Health.Redis.RadicitusRedis
             {
                 var lowerCaseTag = tag.ToLower();
                 await _db.SetAddAsync(lowerCaseTag, json);
+                await _db.SetAddAsync("tags", lowerCaseTag);
             }
             await _db.SetAddAsync("resources", json);
         }
