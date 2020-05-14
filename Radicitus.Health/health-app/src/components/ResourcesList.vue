@@ -4,6 +4,9 @@
   max-height: 250px;
   overflow-y: scroll;
 }
+.card-button-overflow {
+  overflow-y: hidden;
+}
 .center-add-icon {
   margin-top: 10%;
 }
@@ -70,7 +73,7 @@
       <div class="columns is-multiline">
         <div
           @click="addResource"
-          class="column min-card-height is-light button is-primary is-4-desktop is-12-mobile"
+          class="card-button-overflow column min-card-height is-light button is-primary is-4-desktop is-12-mobile"
         >
           <div class="is-size-4 has-text-centered">Create a Resource</div>
           <div class="center-add-icon has-text-centered">

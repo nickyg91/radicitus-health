@@ -183,12 +183,6 @@ $link-focus-border: $primary;
           </div>
           <div class="navbar-menu">
             <div class="navbar-end">
-              <router-link
-                class="navbar-item"
-                active-class="is-active"
-                to="/points"
-                exact
-              >Point System</router-link>
               <router-link class="navbar-item" active-class="is-active" to="/players" exact>Players</router-link>
               <router-link
                 class="navbar-item"
@@ -196,6 +190,12 @@ $link-focus-border: $primary;
                 to="/resources"
                 exact
               >Resources</router-link>
+              <router-link
+                class="navbar-item"
+                active-class="is-active"
+                to="/points"
+                exact
+              >Point System</router-link>
             </div>
           </div>
         </nav>
@@ -213,12 +213,6 @@ $link-focus-border: $primary;
           <router-link
             class="is-tab navbar-item"
             active-class="is-active has-text-white"
-            to="/points"
-            exact
-          >Point System</router-link>
-          <router-link
-            class="is-tab navbar-item"
-            active-class="is-active has-text-white"
             to="/players"
             exact
           >Players</router-link>
@@ -228,6 +222,12 @@ $link-focus-border: $primary;
             to="/resources"
             exact
           >Resources</router-link>
+          <router-link
+            class="is-tab navbar-item"
+            active-class="is-active has-text-white"
+            to="/points"
+            exact
+          >Point System</router-link>
         </div>
       </div>
     </div>
