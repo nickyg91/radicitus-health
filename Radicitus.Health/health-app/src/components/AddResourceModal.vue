@@ -14,7 +14,7 @@
         ></b-input>
       </b-field>
       <b-field label="Description">
-        <b-input type="textarea" placeholder="Description" v-model="model.desription"></b-input>
+        <b-input type="textarea" placeholder="Description" v-model="model.description"></b-input>
       </b-field>
       <b-field label="Url" placeholder="Link">
         <b-input type="text" v-model="model.url"></b-input>
@@ -38,7 +38,7 @@
       >Must have at least one tag selected.</p>
     </div>
     <div class="has-margin-top-5 has-text-right">
-      <button class="button is-success">
+      <button @click="onSubmitClicked" class="button is-success">
         <span class="icon">
           <i class="fas fa-save"></i>
         </span>
@@ -97,6 +97,25 @@ export default class AddResourceModal extends Vue {
   //       this.showPreview = false;
   //     }
   //   }
-
+  public async onSubmitClicked() {
+    try {
+      this.loading = true;
+      await this.resourceService.submitResource(this.model);
+      this.loading = false;
+      this.$buefy.notification.open({
+        message: 'Your Resource has been added successfully!',
+        type: 'is-success',
+        position: 'is-bottom-right'
+      });
+      this.$emit('resource-added', this.model);
+    } catch (error) {
+      this.loading = false;
+      this.$buefy.notification.open({
+        message: 'An error has occurred while submitting the resource.',
+        type: 'is-danger',
+        position: 'is-bottom-right'
+      });
+    }
+  }
 }
 </script>
