@@ -1,6 +1,8 @@
 <style scoped>
 .min-card-height {
   min-height: 250px;
+  max-height: 250px;
+  overflow-y: scroll;
 }
 .center-add-icon {
   margin-top: 10%;
@@ -76,7 +78,7 @@
           </div>
         </div>
         <div
-          class="column min-card-height is-4-desktop is-12-mobile"
+          class="column is-4-desktop is-12-mobile"
           v-for="resource in resources"
           :key="resource.guid"
         >

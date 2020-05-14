@@ -7,14 +7,14 @@
           <p class="subtitle is-6">
             <a target="_blank" :href="resource.url">{{resource.url}}</a>
           </p>
+          <div class="content">
+            <span class="tags">
+              <span class="tag is-success" v-for="tag in resource.tags" :key="tag">{{tag}}</span>
+            </span>
+          </div>
         </div>
       </div>
       <div class="content">{{resource.description}}</div>
-      <div class="content">
-        <span class="tags">
-          <span class="tag is-success" v-for="tag in resource.tags" :key="tag">{{tag}}</span>
-        </span>
-      </div>
     </div>
   </div>
 </template>

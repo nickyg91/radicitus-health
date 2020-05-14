@@ -28,7 +28,7 @@
 }
 
 .is-nav-centered {
-  margin-left: 42.75%;
+  margin-left: 44%;
 }
 // Import Bulma's core
 @import "~bulma/sass/utilities/_all";
