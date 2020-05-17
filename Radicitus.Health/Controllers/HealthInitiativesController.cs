@@ -61,6 +61,11 @@ namespace Radicitus.Health.Controllers
                 Goal = (int)leaderboard.Sum(x => x.PoundsLost),
 
             };
+            var now = DateTime.Now;
+            var daysSinceStart = (dbInitiative.StartDateTime.Value.Date - now.Date).Days;
+            var daysUntilEnd = (dbInitiative.EndDateTime.Value.Date - now.Date).Days;
+            currentHealthInitiative.CanSubmitPicture = daysSinceStart <= 7 && daysSinceStart >= 0 || daysUntilEnd <= 7 && daysUntilEnd >= 0;
+
             return Ok(currentHealthInitiative);
         }
 

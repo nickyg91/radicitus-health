@@ -5,14 +5,14 @@ ul > li {
 </style>
 <template>
   <section class="section">
-    <div class="content has-text-centered">
-      <h1 class="title">Point System</h1>
-      <ul>
-        <li>Weekly Check-In: 1 Point</li>
-        <li>Weekly Weight Loss: 1 Point</li>
-        <li>Scale Picture Submission: 3 Points</li>
-        <li>Personal Goal Achieved: 5 Points</li>
-      </ul>
+    <div class="content">
+      <h1 class="title has-text-centered">Point System</h1>
+      <div class="has-text-centered">
+        <div>Weekly Check-In: 1 Point</div>
+        <div>Weekly Weight Loss: 1 Point</div>
+        <div>Scale Picture Submission: 3 Points</div>
+        <div>Personal Goal Achieved: 5 Points</div>
+      </div>
     </div>
   </section>
 </template>

@@ -28,6 +28,9 @@
         <b-tab-item label="Create">
           <create-health-initiative v-on:created-initative="refresh"></create-health-initiative>
         </b-tab-item>
+        <b-tab-item label="Resources">
+          <resources-admin></resources-admin>
+        </b-tab-item>
       </b-tabs>
     </div>
   </section>
@@ -42,12 +45,14 @@ import CreateHealthInitiative from '@/components/CreateHealthInitiative.vue';
 import InitiativeLogs from '@/components/InitiativeLogs.vue';
 import Logs from '@/models/logs.model';
 import Participant from '../models/participant.model';
+import ResourcesAdmin from '@/components/ResourcesAdmin.vue';
 
 @Component({
   components: {
     ViewAdminHealthInitiatives,
     CreateHealthInitiative,
-    InitiativeLogs
+    InitiativeLogs,
+    ResourcesAdmin
   }
 })
 export default class HealthInitiativesAdmin extends Vue {

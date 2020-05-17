@@ -3,6 +3,7 @@ import VueRouter, { RouteConfig } from 'vue-router'
 import Home from '@/views/Home.vue'
 import PointSystem from '@/views/PointSystem.vue';
 import Admin from '@/views/Admin.vue';
+import Resources from '@/views/Resources.vue';
 
 Vue.use(VueRouter)
 
@@ -26,6 +27,11 @@ const routes: Array<RouteConfig> = [
     path: '/admin',
     name: 'Admin',
     component: Admin
+  },
+  {
+    path: '/resources',
+    name: 'Resources',
+    component: Resources
   }
 ]
 

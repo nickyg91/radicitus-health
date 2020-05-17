@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices;
@@ -8,6 +10,8 @@ using Microsoft.Extensions.Hosting;
 using Radicitus.Health.Data.Contexts;
 using Radicitus.Health.Data.Repositories.Implementations;
 using Radicitus.Health.Data.Repositories.Interfaces;
+using Radicitus.Health.Redis;
+using Radicitus.Health.Redis.RadicitusRedis;
 using VueCliMiddleware;
 
 namespace Radicitus.Health
@@ -36,6 +40,7 @@ namespace Radicitus.Health
         public void ConfigureServices(IServiceCollection services)
         {
             var connectionString = Configuration.GetConnectionString("radicitus-health");
+            var redisConnectionString = Configuration.GetConnectionString("radicitus-health-redis");
             var dbContext = new RadicitusHealthContext();
             services.AddDbContext<RadicitusHealthContext>(optionsAction =>
             {
@@ -45,6 +50,14 @@ namespace Radicitus.Health
                 });
             });
 
+            var redisConnection = new RedisConnection(redisConnectionString);
+            redisConnection.Connect();
+            var repo = new RadicitusRedisDataRepository(redisConnection);
+            repo.AddTags(new List<string> { "recipes", "workouts", "playlists" }).GetAwaiter().GetResult();
+            services.AddSingleton<IRadicitusRedisDataRepository, RadicitusRedisDataRepository>((item) =>
+            {
+                return repo;
+            });
             services.AddScoped<IHealthInitiativeRepository, HealthInitiativeRepository>();
             services.AddScoped<IParticipantLogRepository, ParticipantLogRepository>();
             services.AddScoped<IHealthParticipantRepository, HealthParticipantRepository>();

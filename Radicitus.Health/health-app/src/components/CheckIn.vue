@@ -29,7 +29,7 @@
           ></b-input>
         </b-field>
       </div>
-      <div class="column has-text-centered">
+      <div v-if="canSubmitPicture" class="column has-text-centered">
         <b-field>
           <b-upload v-model="uploadedPhoto" drag-drop>
             <section class="section has-text-centered">
@@ -87,7 +87,8 @@ import CheckInModel from '@/models/check-in.model';
 @Component
 export default class CheckIn extends Vue {
   private service = new ParticipantLogsService();
-
+  @Prop({ default: false })
+  public canSubmitPicture!: boolean;
   @Prop({ default: 0 })
   public healthInititativeId!: number;
   @Prop({ default: () => new Array<Participant>() })

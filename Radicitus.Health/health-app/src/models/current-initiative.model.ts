@@ -10,4 +10,5 @@ export default class CurrentHealthInitiative {
     public leaderboard!: Array<LeaderboardEntry>;
     public poundsLost!: number;
     public percentFinished!: number;
+    public canSubmitPicture!: boolean;
 }

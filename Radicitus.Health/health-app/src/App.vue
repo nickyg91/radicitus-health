@@ -18,6 +18,18 @@
   width: 100%;
   opacity: 0.3;
 }
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
+.is-nav-centered {
+  margin-left: 44%;
+}
 // Import Bulma's core
 @import "~bulma/sass/utilities/_all";
 
@@ -160,7 +172,7 @@ $link-focus-border: $primary;
               v-bind:class="{'is-active': isMenuOpen}"
               @click="isOpen"
               role="button"
-              class="navbar-burger burger"
+              class="navbar-burger burger has-text-white"
               aria-label="menu"
               aria-expanded="false"
             >
@@ -171,12 +183,6 @@ $link-focus-border: $primary;
           </div>
           <div class="navbar-menu" v-bind:class="{'is-active': isMenuOpen}">
             <div class="navbar-end">
-              <router-link
-                class="navbar-item"
-                active-class="is-active"
-                to="/points"
-                exact
-              >Point System</router-link>
               <router-link class="navbar-item" active-class="is-active" to="/players" exact>Players</router-link>
               <router-link
                 class="navbar-item"
@@ -184,6 +190,12 @@ $link-focus-border: $primary;
                 to="/resources"
                 exact
               >Resources</router-link>
+              <router-link
+                class="navbar-item"
+                active-class="is-active"
+                to="/points"
+                exact
+              >Point System</router-link>
             </div>
           </div>
         </nav>
@@ -196,14 +208,8 @@ $link-focus-border: $primary;
       </div>
     </section>
     <div class="has-background-success is-hidden-mobile">
-      <div class="navbar-menu" v-bind:class="{'is-active': isMenuOpen}">
-        <div class="navbar-end">
-          <router-link
-            class="is-tab navbar-item"
-            active-class="is-active has-text-white"
-            to="/points"
-            exact
-          >Point System</router-link>
+      <div class="navbar-menu">
+        <div class="navbar-start is-nav-centered">
           <router-link
             class="is-tab navbar-item"
             active-class="is-active has-text-white"
@@ -216,11 +222,24 @@ $link-focus-border: $primary;
             to="/resources"
             exact
           >Resources</router-link>
+          <router-link
+            class="is-tab navbar-item"
+            active-class="is-active has-text-white"
+            to="/points"
+            exact
+          >Point System</router-link>
         </div>
       </div>
     </div>
     <section class="section">
-      <router-view />
+      <transition
+        name="fade"
+        enter-active-class="fade-enter-active"
+        leave-active-class="fade-leave-active"
+        mode="out-in"
+      >
+        <router-view />
+      </transition>
     </section>
   </section>
 </template>
@@ -233,5 +252,6 @@ export default class App extends Vue {
   public isOpen() {
     this.isMenuOpen = !this.isMenuOpen;
   }
+
 }
 </script>
