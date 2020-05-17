@@ -25,4 +25,8 @@ export default class ResourcesService {
         const response = await this._http.post('api/resource/filter', tags);
         return response.data;
     }
+
+    public async remove(guid: string): Promise<void> {
+        await this._http.delete(`api/resource/remove/${guid}`);
+    }
 }

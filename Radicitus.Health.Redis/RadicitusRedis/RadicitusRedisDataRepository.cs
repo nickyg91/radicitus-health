@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -31,9 +32,10 @@ namespace Radicitus.Health.Redis.RadicitusRedis
 
         public async Task<IEnumerable<ResourceItem>> GetAllResourceItems()
         {
-            var json = await _db.SetMembersAsync("resources");
+            var guids = (await _db.SetMembersAsync("resources")).Select(x => new RedisKey(x)).ToArray();
             var resources = new List<ResourceItem>();
-            foreach (var item in json)
+            var jsonList = await _db.StringGetAsync(guids);
+            foreach (var item in jsonList)
             {
                 var deserializedResource = JsonSerializer.Deserialize<ResourceItem>(item);
                 resources.Add(deserializedResource);
@@ -50,7 +52,8 @@ namespace Radicitus.Health.Redis.RadicitusRedis
             {
                 fetchedTags = await _db.SetCombineAsync(SetOperation.Union, redisKeys);
             }
-            foreach (var item in fetchedTags)
+            var list = await _db.StringGetAsync(fetchedTags.Select(x => new RedisKey(x)).ToArray());
+            foreach (var item in list)
             {
                 var deserializedMember = JsonSerializer.Deserialize<ResourceItem>(item);
                 items.Add(deserializedMember);
@@ -64,6 +67,19 @@ namespace Radicitus.Health.Redis.RadicitusRedis
             return tags.Select(x => x.ToString()).ToList();
         }
 
+        public async Task RemoveResource(Guid guid)
+        {
+            await _db.SetRemoveAsync("resources", guid.ToString());
+            await _db.KeyDeleteAsync(guid.ToString());
+            var tags = await _db.SetMembersAsync("tags");
+            var tasks = new List<Task>();
+            foreach (var tag in tags)
+            {
+                tasks.Add(_db.SetRemoveAsync(tag.ToString(), guid.ToString()));
+            }
+            await Task.WhenAll(tasks);
+        }
+
         public async Task StoreResourceItem(ResourceItem item)
         {
             using var memoryStream = new MemoryStream();
@@ -73,12 +89,11 @@ namespace Radicitus.Health.Redis.RadicitusRedis
             foreach (var tag in item.Tags)
             {
                 var lowerCaseTag = tag.ToLower();
-                await _db.SetAddAsync(lowerCaseTag, json);
+                await _db.SetAddAsync(lowerCaseTag, item.Guid.ToString());
                 await _db.SetAddAsync("tags", lowerCaseTag);
             }
-            await _db.SetAddAsync("resources", json);
+            await _db.SetAddAsync("resources", item.Guid.ToString());
         }
-
 
     }
 }

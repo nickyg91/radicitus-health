@@ -86,7 +86,8 @@ export default class AddResourceModal extends Vue {
       this.$buefy.notification.open({
         message: 'Your Resource has been added successfully!',
         type: 'is-success',
-        position: 'is-bottom-right'
+        position: 'is-bottom-right',
+        hasIcon: true
       });
       this.$emit('resource-added', this.model);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -96,7 +97,8 @@ export default class AddResourceModal extends Vue {
       this.$buefy.notification.open({
         message: 'An error has occurred while submitting the resource.',
         type: 'is-danger',
-        position: 'is-bottom-right'
+        position: 'is-bottom-right',
+        hasIcon: true
       });
     }
   }

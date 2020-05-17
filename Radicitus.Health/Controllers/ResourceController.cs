@@ -47,5 +47,12 @@ namespace Radicitus.Health.Controllers
             var resources = await _repo.GetAllResourceItemsByTags(tags);
             return Ok(resources);
         }
+
+        [HttpDelete("remove/{guid}")]
+        public async Task<IActionResult> RemoveResource(Guid guid)
+        {
+            await _repo.RemoveResource(guid);
+            return Ok();
+        }
     }
 }
