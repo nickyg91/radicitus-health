@@ -20,4 +20,9 @@ export default class ResourcesService {
     public async submitResource(resource: ResourceItem): Promise<void> {
         await this._http.post('api/resource/submit', resource);
     }
+
+    public async filterResources(tags: Array<string>): Promise<Array<ResourceItem>> {
+        const response = await this._http.post('api/resource/filter', tags);
+        return response.data;
+    }
 }

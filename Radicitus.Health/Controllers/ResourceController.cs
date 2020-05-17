@@ -40,5 +40,12 @@ namespace Radicitus.Health.Controllers
             var tags = await _repo.GetAllTags();
             return Ok(tags);
         }
+
+        [HttpPost("filter")]
+        public async Task<IActionResult> FilterResources(List<string> tags)
+        {
+            var resources = await _repo.GetAllResourceItemsByTags(tags);
+            return Ok(resources);
+        }
     }
 }

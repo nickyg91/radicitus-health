@@ -45,8 +45,12 @@ namespace Radicitus.Health.Redis.RadicitusRedis
         {
             var items = new List<ResourceItem>();
             var redisKeys = tags.Select(x => new RedisKey(x)).ToArray();
-            var intersectingTags = await _db.SetCombineAsync(SetOperation.Intersect, redisKeys);
-            foreach (var item in intersectingTags)
+            var fetchedTags = await _db.SetCombineAsync(SetOperation.Intersect, redisKeys);
+            if (!fetchedTags.Any())
+            {
+                fetchedTags = await _db.SetCombineAsync(SetOperation.Union, redisKeys);
+            }
+            foreach (var item in fetchedTags)
             {
                 var deserializedMember = JsonSerializer.Deserialize<ResourceItem>(item);
                 items.Add(deserializedMember);

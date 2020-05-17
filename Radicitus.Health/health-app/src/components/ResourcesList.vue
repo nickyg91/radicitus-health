@@ -19,30 +19,31 @@
         <div class="columns">
           <div class="column is-9-desktop">
             <b-field>
-              <b-input type="text" placeholder="Search Resources"></b-input>
-            </b-field>
-            <b-field>
               <b-taginput
-                :data="filteredTags"
+                :data="tags"
                 autocomplete
                 :allow-new="true"
                 :open-on-focus="true"
                 icon="tag"
                 placeholder="Add a filter"
                 @typing="getFilteredTags"
+                v-model="filteredTags"
                 type="is-success"
               ></b-taginput>
+            </b-field>
+            <b-field>
+              <b-input @keyup.native="search($event)" type="text" placeholder="Search Resources"></b-input>
             </b-field>
           </div>
           <div class="column is-3-desktop">
             <div class="is-hidden-mobile buttons">
-              <button class="button is-outlined is-info">
+              <button @click="filterResources" class="button is-outlined is-info">
                 <span class="icon">
-                  <i class="fas fa-search"></i>
+                  <i class="fas fa-filter"></i>
                 </span>
-                <span>Search</span>
+                <span>Filter</span>
               </button>
-              <button class="button is-dark is-outlined">
+              <button @click="clearFilter" class="button is-dark is-outlined">
                 <span class="icon">
                   <i class="fas fa-tags"></i>
                 </span>
@@ -51,15 +52,21 @@
             </div>
             <div class="columns is-hidden-desktop">
               <div class="column">
-                <button class="button is-fullwidth is-large is-outlined is-info">
+                <button
+                  @click="filterResources"
+                  class="button is-fullwidth is-large is-outlined is-info"
+                >
                   <span class="icon">
-                    <i class="fas fa-search"></i>
+                    <i class="fas fa-filter"></i>
                   </span>
-                  <span>Search</span>
+                  <span>Filter</span>
                 </button>
               </div>
               <div class="column">
-                <button class="button is-fullwidth is-large is-dark is-outlined">
+                <button
+                  @click="clearFilter"
+                  class="button is-fullwidth is-large is-dark is-outlined"
+                >
                   <span class="icon">
                     <i class="fas fa-tags"></i>
                   </span>
@@ -82,7 +89,7 @@
         </div>
         <div
           class="column is-4-desktop is-12-mobile"
-          v-for="resource in resources"
+          v-for="resource in filteredResources"
           :key="resource.guid"
         >
           <resource :resource="resource"></resource>
@@ -123,10 +130,11 @@ export default class ResourcesList extends Vue {
   public resources = new Array<ResourceItem>();
   public tags = new Array<string>();
   public filteredTags = new Array<string>();
+  public filteredResources = new Array<ResourceItem>();
   async mounted() {
     this.resources = await this.resourcesService.getAllResources();
+    this.filteredResources = this.resources;
     this.tags = await this.resourcesService.getAllTags();
-    this.filteredTags = this.tags;
   }
 
   public getFilteredTags(text: string) {
@@ -144,6 +152,24 @@ export default class ResourcesList extends Vue {
         }
       }
     });
+  }
+
+  public async filterResources() {
+    this.filteredResources = await this.resourcesService.filterResources(this.filteredTags);
+  }
+
+  public clearFilter() {
+    this.filteredResources = this.resources;
+  }
+
+  public search(input: KeyboardEvent) {
+    const text = (input.target as HTMLInputElement).value;
+    if (text.length > 0) {
+      this.filteredResources = this.filteredResources.filter(x => `${x.url.toLowerCase()}${x.description.toLowerCase()}${x.name.toLowerCase()}`.indexOf(text.toLowerCase()) > -1);
+    }
+    if (text.length === 0) {
+      this.filteredResources = this.resources;
+    }
   }
 }
 </script>

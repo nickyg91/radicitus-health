@@ -53,7 +53,7 @@ namespace Radicitus.Health
             var redisConnection = new RedisConnection(redisConnectionString);
             redisConnection.Connect();
             var repo = new RadicitusRedisDataRepository(redisConnection);
-            repo.AddTags(new List<string> { "Recipes", "Workouts", "Playlists" }).GetAwaiter().GetResult();
+            repo.AddTags(new List<string> { "recipes", "workouts", "playlists" }).GetAwaiter().GetResult();
             services.AddSingleton<IRadicitusRedisDataRepository, RadicitusRedisDataRepository>((item) =>
             {
                 return repo;
