@@ -181,7 +181,7 @@ $link-focus-border: $primary;
               <span class="has-text-white" aria-hidden="true"></span>
             </a>
           </div>
-          <div class="navbar-menu">
+          <div class="navbar-menu" v-bind:class="{'is-active': isMenuOpen}">
             <div class="navbar-end">
               <router-link class="navbar-item" active-class="is-active" to="/players" exact>Players</router-link>
               <router-link
@@ -208,7 +208,7 @@ $link-focus-border: $primary;
       </div>
     </section>
     <div class="has-background-success is-hidden-mobile">
-      <div class="navbar-menu" v-bind:class="{'is-active': isMenuOpen}">
+      <div class="navbar-menu">
         <div class="navbar-start is-nav-centered">
           <router-link
             class="is-tab navbar-item"

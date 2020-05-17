@@ -32,10 +32,15 @@
               ></b-taginput>
             </b-field>
             <b-field>
-              <b-input @keyup.native="search($event)" type="text" placeholder="Search Resources"></b-input>
+              <b-input
+                @keyup.native="search()"
+                v-model="searchTerm"
+                type="text"
+                placeholder="Search Resources"
+              ></b-input>
             </b-field>
           </div>
-          <div class="column is-3-desktop">
+          <div class="column is-3-tablet is-3-desktop">
             <div class="is-hidden-mobile buttons">
               <button @click="filterResources" class="button is-outlined is-info">
                 <span class="icon">
@@ -50,7 +55,7 @@
                 <span>Clear</span>
               </button>
             </div>
-            <div class="columns is-hidden-desktop">
+            <div class="columns is-hidden-tablet is-hidden-desktop">
               <div class="column">
                 <button
                   @click="filterResources"
@@ -131,6 +136,7 @@ export default class ResourcesList extends Vue {
   public tags = new Array<string>();
   public filteredTags = new Array<string>();
   public filteredResources = new Array<ResourceItem>();
+  public searchTerm = '';
   async mounted() {
     this.resources = await this.resourcesService.getAllResources();
     this.filteredResources = this.resources;
@@ -160,12 +166,15 @@ export default class ResourcesList extends Vue {
 
   public clearFilter() {
     this.filteredResources = this.resources;
+    this.filteredTags = [];
+    this.searchTerm = '';
+
   }
 
-  public search(input: KeyboardEvent) {
-    const text = (input.target as HTMLInputElement).value;
+  public search() {
+    const text = this.searchTerm;
     if (text.length > 0) {
-      this.filteredResources = this.filteredResources.filter(x => `${x.url.toLowerCase()}${x.description.toLowerCase()}${x.name.toLowerCase()}`.indexOf(text.toLowerCase()) > -1);
+      this.filteredResources = this.filteredResources.filter(x => `${x.url?.toLowerCase()}${x.description?.toLowerCase()}${x.name?.toLowerCase()}`.indexOf(text.toLowerCase()) > -1);
     }
     if (text.length === 0) {
       this.filteredResources = this.resources;
