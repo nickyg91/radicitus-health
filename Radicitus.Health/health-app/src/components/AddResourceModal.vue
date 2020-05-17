@@ -77,26 +77,7 @@ export default class AddResourceModal extends Vue {
   public getFilteredTags(text: string) {
     this.filteredTags = this.tags.filter(x => x.toLowerCase().indexOf(text.toLowerCase()) > -1);
   }
-  //   public onUrlCompleted(url: string) {
-  //     console.log(url);
-  //     if (url.length > 0) {
-  //       this.loading = true;
-  //       this.$http.get(url, {
-  //         headers: {
-  //           'Accept': '*/*',
-  //           'Content-Type': 'appllication/x-www-form-url-encoded',
 
-  //         }
-  //       }).then(response => {
-  //         console.log(response);
-  //         this.loading = false;
-  //         this.showPreview = true;
-  //       });
-  //     } else {
-  //       this.loading = false;
-  //       this.showPreview = false;
-  //     }
-  //   }
   public async onSubmitClicked() {
     try {
       this.loading = true;
@@ -108,6 +89,8 @@ export default class AddResourceModal extends Vue {
         position: 'is-bottom-right'
       });
       this.$emit('resource-added', this.model);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (this.$parent as any).close()
     } catch (error) {
       this.loading = false;
       this.$buefy.notification.open({
