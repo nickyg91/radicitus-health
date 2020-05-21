@@ -67,6 +67,12 @@ namespace Radicitus.Health.Redis.RadicitusRedis
             return tags.Select(x => x.ToString()).ToList();
         }
 
+        public async Task<ResourceItem> GetResourceItemByGuid(Guid guid)
+        {
+            var json = await _db.StringGetAsync(guid.ToString());
+            return JsonSerializer.Deserialize<ResourceItem>(json);
+        }
+
         public async Task<string> GetStringAsync(string key)
         {
             return await _db.StringGetAsync(key);
@@ -104,5 +110,7 @@ namespace Radicitus.Health.Redis.RadicitusRedis
         {
             await _db.StringSetAsync(key, value);
         }
+
+
     }
 }

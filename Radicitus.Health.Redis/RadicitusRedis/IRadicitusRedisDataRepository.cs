@@ -15,5 +15,6 @@ namespace Radicitus.Health.Redis.RadicitusRedis
         Task RemoveResource(Guid guid);
         Task StoreStringAsync(string key, string value);
         Task<string> GetStringAsync(string key);
+        Task<ResourceItem> GetResourceItemByGuid(Guid guid);
     }
 }
