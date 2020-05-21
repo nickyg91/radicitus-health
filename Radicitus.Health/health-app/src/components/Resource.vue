@@ -22,9 +22,28 @@
 import Vue from 'vue'
 import { Prop, Component } from 'vue-property-decorator';
 import ResourceItem from '@/models/resource.model';
+import LinkPreviewService from '@/services/resources/linkpreview.service';
+import { AxiosInstance } from 'axios';
+import LinkPreview from '@/models/link-preview.model';
 @Component
 export default class Resource extends Vue {
   @Prop({ default: () => new ResourceItem() })
   public resource!: ResourceItem;
+  @Prop({ default: () => new LinkPreviewService({} as AxiosInstance) })
+  public linkPreviewService!: LinkPreviewService;
+  public linkPreview!: LinkPreview;
+  public isLoading = false;
+  public showPreview = false;
+  async mounted() {
+    try {
+      this.isLoading = true;
+      this.linkPreview = await this.linkPreviewService.getLinkPreview(this.resource.guid);
+      this.showPreview = true;
+    } catch (error) {
+      this.showPreview = false;
+    } finally {
+      this.isLoading = false;
+    }
+  }
 }
 </script>
