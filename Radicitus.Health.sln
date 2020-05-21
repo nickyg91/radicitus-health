@@ -9,7 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Radicitus.Health.Data", ".\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Radicitus.Health.Dto", ".\Radicitus.Health.Dto\Radicitus.Health.Dto.csproj", "{B11CD9CA-DCED-4E48-93F2-2EB0281786E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Radicitus.Health.Redis", "Radicitus.Health.Redis\Radicitus.Health.Redis.csproj", "{19052A1F-111A-4DCB-B4B5-BDB2A15F107E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Radicitus.Health.Redis", ".\Radicitus.Health.Redis\Radicitus.Health.Redis.csproj", "{19052A1F-111A-4DCB-B4B5-BDB2A15F107E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Radicitus.Integration", "Radicitus.Integration\Radicitus.Integration.csproj", "{A663DF97-D59E-4100-87C9-21ED118BBBF2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{19052A1F-111A-4DCB-B4B5-BDB2A15F107E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19052A1F-111A-4DCB-B4B5-BDB2A15F107E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19052A1F-111A-4DCB-B4B5-BDB2A15F107E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A663DF97-D59E-4100-87C9-21ED118BBBF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A663DF97-D59E-4100-87C9-21ED118BBBF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A663DF97-D59E-4100-87C9-21ED118BBBF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A663DF97-D59E-4100-87C9-21ED118BBBF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

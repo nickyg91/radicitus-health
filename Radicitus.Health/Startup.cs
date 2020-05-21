@@ -12,6 +12,8 @@ using Radicitus.Health.Data.Repositories.Implementations;
 using Radicitus.Health.Data.Repositories.Interfaces;
 using Radicitus.Health.Redis;
 using Radicitus.Health.Redis.RadicitusRedis;
+using Radicitus.Integration.Implementations;
+using Radicitus.Integration.Interfaces;
 using VueCliMiddleware;
 
 namespace Radicitus.Health
@@ -58,6 +60,7 @@ namespace Radicitus.Health
             {
                 return repo;
             });
+            services.AddScoped<IOpenGraphRepository, OpenGraphNetRepository>();
             services.AddScoped<IHealthInitiativeRepository, HealthInitiativeRepository>();
             services.AddScoped<IParticipantLogRepository, ParticipantLogRepository>();
             services.AddScoped<IHealthParticipantRepository, HealthParticipantRepository>();
