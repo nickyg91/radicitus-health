@@ -97,7 +97,7 @@
           v-for="resource in filteredResources"
           :key="resource.guid"
         >
-          <resource :resource="resource"></resource>
+          <resource :linkPreviewService="linkService" :resource="resource"></resource>
         </div>
       </div>
     </div>
@@ -124,6 +124,7 @@ import ResourceItem from '@/models/resource.model';
 import Resource from '@/components/Resource.vue';
 import AddResourceModal from '@/components/AddResourceModal.vue';
 import { Component } from 'vue-property-decorator';
+import LinkPreviewService from '../services/resources/linkpreview.service';
 @Component({
   components: {
     Resource,
@@ -137,7 +138,9 @@ export default class ResourcesList extends Vue {
   public filteredTags = new Array<string>();
   public filteredResources = new Array<ResourceItem>();
   public searchTerm = '';
+  public linkService = new LinkPreviewService(this.$http);
   async mounted() {
+    console.log('test');
     this.resources = await this.resourcesService.getAllResources();
     this.filteredResources = this.resources;
     this.tags = await this.resourcesService.getAllTags();

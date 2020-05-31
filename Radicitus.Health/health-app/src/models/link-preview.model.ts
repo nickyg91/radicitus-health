@@ -1,5 +1,8 @@
+import Track from './track.model';
+
 export default class LinkPreview {
-    public Title!: string;
-    public ImageUrlEncoded!: string;
-    public HtmlEncoded!: string;
+    public title!: string;
+    public imageUrl!: string;
+    public html!: string;
+    public tracks!: Array<Track>;
 }

@@ -29,6 +29,7 @@ namespace Radicitus.Health.Controllers
             {
                 var resourceItem = await _redis.GetResourceItemByGuid(guid);
                 linkPreview = await _repo.ParseUrlAsync(new Uri(resourceItem.Url));
+                await _repo.StorePreview(linkPreview, guid);
             }
             linkPreview.Html = System.Web.HttpUtility.HtmlEncode(linkPreview.Html);
             return Ok(linkPreview);

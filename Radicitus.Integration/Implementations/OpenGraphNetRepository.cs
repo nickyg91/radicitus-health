@@ -6,6 +6,8 @@ using Radicitus.Health.Dto.Dto;
 using Radicitus.Health.Redis;
 using Radicitus.Health.Redis.RadicitusRedis;
 using System.Text.Json;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Radicitus.Integration.Implementations
 {
@@ -50,11 +52,39 @@ namespace Radicitus.Integration.Implementations
             var openGraphData = await OpenGraph.ParseUrlAsync(url);
             if (openGraphData != null)
             {
+                var tracks = new List<Track>();
+                if (url.Host.ToLower().Contains("spotify"))
+                {
+                    var tracksToParse = openGraphData.Metadata["music:song"];
+                    var trackCrawlerTasks = new List<Task>();
+                    foreach (var track in tracksToParse)
+                    {
+                        var songLink = track.Value;
+                        var songTask = Task.Run(async () =>
+                        {
+                            var data = await OpenGraph.ParseUrlAsync(songLink);
+                            var trackToAdd = new Track
+                            {
+                                Name = data.Metadata["og:title"].First().Value,
+                                TrackNumber = short.Parse(data.Metadata["og:album:track"].First().Value),
+                                Artist = data.Metadata["twitter:audio:artist_name"].First().Value,
+                                PlayUrl = data.Metadata["og:audio"].First().Value
+                            };
+                            tracks.Add(trackToAdd);
+                        });
+                        trackCrawlerTasks.Add(songTask);
+                    }
+                    if (trackCrawlerTasks.Any())
+                    {
+                        await Task.WhenAll(trackCrawlerTasks);
+                    }
+                }
                 return new LinkPreview
                 {
                     ImageUrl = openGraphData.Image,
                     Title = openGraphData.Title,
-                    Html = openGraphData.OriginalHtml
+                    Html = openGraphData.OriginalHtml,
+                    Tracks = tracks
                 };
             }
             return null;

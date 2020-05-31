@@ -31,7 +31,7 @@ export default class Resource extends Vue {
   public resource!: ResourceItem;
   @Prop({ default: () => new LinkPreviewService({} as AxiosInstance) })
   public linkPreviewService!: LinkPreviewService;
-  public linkPreview!: LinkPreview;
+  public linkPreview = new LinkPreview();
   public isLoading = false;
   public showPreview = false;
   async mounted() {
