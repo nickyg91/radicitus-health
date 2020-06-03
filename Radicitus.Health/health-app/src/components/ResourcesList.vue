@@ -140,7 +140,6 @@ export default class ResourcesList extends Vue {
   public searchTerm = '';
   public linkService = new LinkPreviewService(this.$http);
   async mounted() {
-    console.log('test');
     this.resources = await this.resourcesService.getAllResources();
     this.filteredResources = this.resources;
     this.tags = await this.resourcesService.getAllTags();

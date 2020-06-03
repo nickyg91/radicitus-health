@@ -65,10 +65,8 @@ namespace Radicitus.Integration.Implementations
                             var data = await OpenGraph.ParseUrlAsync(songLink);
                             var trackToAdd = new Track
                             {
-                                Name = data.Metadata["og:title"].First().Value,
-                                TrackNumber = short.Parse(data.Metadata["og:album:track"].First().Value),
-                                Artist = data.Metadata["twitter:audio:artist_name"].First().Value,
-                                PlayUrl = data.Metadata["og:audio"].First().Value
+                                Name = data.Metadata["og:title"].FirstOrDefault()?.Value,
+                                PlayUrl = data.Metadata["og:audio"].FirstOrDefault()?.Value
                             };
                             tracks.Add(trackToAdd);
                         });
@@ -84,7 +82,7 @@ namespace Radicitus.Integration.Implementations
                     ImageUrl = openGraphData.Image,
                     Title = openGraphData.Title,
                     Html = openGraphData.OriginalHtml,
-                    Tracks = tracks
+                    Tracks = tracks.OrderBy(x => x.TrackNumber).ToList()
                 };
             }
             return null;

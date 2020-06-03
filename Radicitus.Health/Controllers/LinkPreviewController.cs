@@ -32,6 +32,10 @@ namespace Radicitus.Health.Controllers
                 await _repo.StorePreview(linkPreview, guid);
             }
             linkPreview.Html = System.Web.HttpUtility.HtmlEncode(linkPreview.Html);
+            if (linkPreview.Tracks != null && linkPreview.Tracks.Any())
+            {
+                linkPreview.Tracks = linkPreview.Tracks.OrderBy(x => x.TrackNumber).ToList();
+            }
             return Ok(linkPreview);
         }
     }
