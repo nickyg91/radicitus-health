@@ -67,6 +67,17 @@ namespace Radicitus.Health.Redis.RadicitusRedis
             return tags.Select(x => x.ToString()).ToList();
         }
 
+        public async Task<ResourceItem> GetResourceItemByGuid(Guid guid)
+        {
+            var json = await _db.StringGetAsync(guid.ToString());
+            return JsonSerializer.Deserialize<ResourceItem>(json);
+        }
+
+        public async Task<string> GetStringAsync(string key)
+        {
+            return await _db.StringGetAsync(key);
+        }
+
         public async Task RemoveResource(Guid guid)
         {
             await _db.SetRemoveAsync("resources", guid.ToString());
@@ -94,6 +105,19 @@ namespace Radicitus.Health.Redis.RadicitusRedis
             }
             await _db.SetAddAsync("resources", item.Guid.ToString());
         }
+
+        public async Task StoreStringAsync(string key, string value, TimeSpan? expiration = null)
+        {
+            if (expiration != null)
+            {
+                await _db.StringSetAsync(key, value, expiration);
+            }
+            else
+            {
+                await _db.StringSetAsync(key, value);
+            }
+        }
+
 
     }
 }

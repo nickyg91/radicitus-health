@@ -13,6 +13,7 @@
 </style>
 <template>
   <div class="container">
+    <b-loading :is-full-page="false" :active.sync="isLoading"></b-loading>
     <div v-if="resources.length > 0">
       <div class="content">
         <div class="title is-size-2">Health Resources</div>
@@ -97,7 +98,7 @@
           v-for="resource in filteredResources"
           :key="resource.guid"
         >
-          <resource :resource="resource"></resource>
+          <resource :linkPreviewService="linkService" :resource="resource"></resource>
         </div>
       </div>
     </div>
@@ -124,6 +125,7 @@ import ResourceItem from '@/models/resource.model';
 import Resource from '@/components/Resource.vue';
 import AddResourceModal from '@/components/AddResourceModal.vue';
 import { Component } from 'vue-property-decorator';
+import LinkPreviewService from '../services/resources/linkpreview.service';
 @Component({
   components: {
     Resource,
@@ -137,10 +139,14 @@ export default class ResourcesList extends Vue {
   public filteredTags = new Array<string>();
   public filteredResources = new Array<ResourceItem>();
   public searchTerm = '';
+  public linkService = new LinkPreviewService(this.$http);
+  public isLoading = false;
   async mounted() {
+    this.isLoading = true;
     this.resources = await this.resourcesService.getAllResources();
     this.filteredResources = this.resources;
     this.tags = await this.resourcesService.getAllTags();
+    this.isLoading = false;
   }
 
   public getFilteredTags(text: string) {
@@ -153,8 +159,11 @@ export default class ResourcesList extends Vue {
       parent: this,
       trapFocus: true,
       events: {
-        'resource-added': (item: ResourceItem) => {
-          this.resources.push(item);
+        'resource-added': async () => {
+          this.isLoading = true;
+          this.resources = await this.resourcesService.getAllResources();
+          this.filteredResources = this.resources;
+          this.isLoading = false;
         }
       }
     });
