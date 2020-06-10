@@ -13,6 +13,7 @@
 </style>
 <template>
   <div class="container">
+    <b-loading :is-full-page="false" :active.sync="isLoading"></b-loading>
     <div v-if="resources.length > 0">
       <div class="content">
         <div class="title is-size-2">Health Resources</div>
@@ -139,10 +140,13 @@ export default class ResourcesList extends Vue {
   public filteredResources = new Array<ResourceItem>();
   public searchTerm = '';
   public linkService = new LinkPreviewService(this.$http);
+  public isLoading = false;
   async mounted() {
+    this.isLoading = true;
     this.resources = await this.resourcesService.getAllResources();
     this.filteredResources = this.resources;
     this.tags = await this.resourcesService.getAllTags();
+    this.isLoading = false;
   }
 
   public getFilteredTags(text: string) {
@@ -155,8 +159,11 @@ export default class ResourcesList extends Vue {
       parent: this,
       trapFocus: true,
       events: {
-        'resource-added': (item: ResourceItem) => {
-          this.resources.push(item);
+        'resource-added': async () => {
+          this.isLoading = true;
+          this.resources = await this.resourcesService.getAllResources();
+          this.filteredResources = this.resources;
+          this.isLoading = false;
         }
       }
     });

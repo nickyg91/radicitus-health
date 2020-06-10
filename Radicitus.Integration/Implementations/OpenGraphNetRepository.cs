@@ -91,7 +91,7 @@ namespace Radicitus.Integration.Implementations
         public async Task StorePreview(LinkPreview preview, Guid guid)
         {
             var json = JsonSerializer.Serialize(preview);
-            await _redis.StoreStringAsync($"{guid}:linkpreview", json);
+            await _redis.StoreStringAsync($"{guid}:linkpreview", json, TimeSpan.FromMinutes(20));
         }
     }
 }

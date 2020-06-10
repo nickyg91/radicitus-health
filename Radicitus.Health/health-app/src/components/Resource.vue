@@ -14,47 +14,15 @@
           </div>
         </div>
       </div>
-      <div class="content">{{resource.description}}</div>
-      <div v-if="linkPreview.tracks">
-        <div class="media">
-          <div class="media-left">
-            <figure class="image is-48x48">
-              <img v-bind:src="linkPreview.imageUrl" alt="album art" />
-            </figure>
-          </div>
-          <div class="media-content">{{linkPreview.title}}</div>
-        </div>
-        <div class="content">
-          <div class="content" v-for="(track, index) in linkPreview.tracks" :key="index">
-            <span
-              v-if="!isPlaying"
-              @click="playOrPause(track.playUrl, index)"
-              class="button button-small is-info is-outlined"
-            >
-              <span class="icon is-small">
-                <i class="fa fa-play"></i>
-              </span>
+      <div class="columns is-mobile">
+        <div class="column">{{resource.description}}</div>
+        <div class="column has-text-right" v-if="linkPreview.tracks">
+          <button @click="showTracks()" class="is-small button is-outlined is-primary">
+            <span class="icon">
+              <i class="fa fa-eye"></i>
             </span>
-            <span
-              v-if="isPlaying && currentSongPlayingIndex !== index"
-              @click="playOrPause(track.playUrl, index)"
-              class="button button-small is-info is-outlined"
-            >
-              <span class="icon is-small">
-                <i class="fa fa-play"></i>
-              </span>
-            </span>
-            <span
-              v-if="isPlaying && currentSongPlayingIndex === index"
-              @click="pauseAudio()"
-              class="button button-small is-info is-outlined"
-            >
-              <span class="icon is-small">
-                <i class="fa fa-pause"></i>
-              </span>
-            </span>
-            {{track.name}}
-          </div>
+            <span>View Tracks</span>
+          </button>
         </div>
       </div>
     </div>
@@ -67,7 +35,12 @@ import ResourceItem from '@/models/resource.model';
 import LinkPreviewService from '@/services/resources/linkpreview.service';
 import { AxiosInstance } from 'axios';
 import LinkPreview from '@/models/link-preview.model';
-@Component
+import TracksModal from './TracksModal.vue';
+@Component({
+  components: {
+    TracksModal
+  }
+})
 export default class Resource extends Vue {
   @Prop({ default: () => new ResourceItem() })
   public resource!: ResourceItem;
@@ -91,24 +64,15 @@ export default class Resource extends Vue {
     }
   }
 
-  public pauseAudio() {
-    this.audio.pause();
-    this.isPlaying = false;
-    this.currentSongPlayingIndex = -1;
-  }
-
-  public async playOrPause(url: string, index: number) {
-    if (this.isPlaying && this.currentSongPlayingIndex !== index) {
-      this.audio.pause();
-      this.audio = new Audio(url);
-      this.currentSongPlayingIndex = index;
-      await this.audio.play();
-    } else {
-      this.audio = new Audio(url);
-      this.currentSongPlayingIndex = index;
-      this.isPlaying = true;
-      await this.audio.play();
-    }
+  public showTracks() {
+    this.$buefy.modal.open({
+      component: TracksModal,
+      parent: this,
+      props: {
+        linkPreview: this.linkPreview
+      },
+      trapFocus: true
+    })
   }
 }
 </script>

@@ -2,6 +2,9 @@
 .header-image {
   width: 12%;
 }
+.mobile-header-image {
+  width: 5%;
+}
 .width-zero {
   width: 0px;
 }
@@ -163,43 +166,53 @@ $link-focus-border: $primary;
 </style>
 <template>
   <section id="app">
-    <section class="hero is-success is-small has-background-image">
-      <img class="bg-photo" src="@/assets/header.png" />
-      <div class="hero-head">
-        <nav class="navbar is-hidden-desktop">
-          <div class="navbar-brand">
-            <a
-              v-bind:class="{'is-active': isMenuOpen}"
-              @click="isOpen"
-              role="button"
-              class="navbar-burger burger has-text-white"
-              aria-label="menu"
-              aria-expanded="false"
-            >
-              <span class="has-text-white" aria-hidden="true"></span>
-              <span class="has-text-white" aria-hidden="true"></span>
-              <span class="has-text-white" aria-hidden="true"></span>
-            </a>
-          </div>
-          <div class="navbar-menu" v-bind:class="{'is-active': isMenuOpen}">
-            <div class="navbar-end">
-              <router-link class="navbar-item" active-class="is-active" to="/players" exact>Players</router-link>
-              <router-link
-                class="navbar-item"
-                active-class="is-active"
-                to="/resources"
-                exact
-              >Resources</router-link>
-              <router-link
-                class="navbar-item"
-                active-class="is-active"
-                to="/points"
-                exact
-              >Point System</router-link>
-            </div>
-          </div>
-        </nav>
+    <nav class="navbar has-background-success is-hidden-desktop is-fixed-top">
+      <div class="navbar-brand">
+        <figure class="navbar-item">
+          <img src="@/assets/Logo_Radicitus_White.png" alt />
+        </figure>
+        <a
+          v-bind:class="{'is-active': isMenuOpen}"
+          @click="isOpen"
+          role="button"
+          class="navbar-burger burger has-text-white"
+          aria-label="menu"
+          aria-expanded="false"
+        >
+          <span class="has-text-white" aria-hidden="true"></span>
+          <span class="has-text-white" aria-hidden="true"></span>
+          <span class="has-text-white" aria-hidden="true"></span>
+        </a>
       </div>
+      <div class="navbar-menu" v-bind:class="{'is-active': isMenuOpen}">
+        <div class="navbar-end">
+          <router-link
+            @click.native="isMenuOpen = false"
+            class="navbar-item"
+            active-class="is-active"
+            to="/players"
+            exact
+          >Players</router-link>
+          <router-link
+            @click.native="isMenuOpen = false"
+            class="navbar-item"
+            active-class="is-active"
+            to="/resources"
+            exact
+          >Resources</router-link>
+          <router-link
+            @click.native="isMenuOpen = false"
+            class="navbar-item"
+            active-class="is-active"
+            to="/points"
+            exact
+          >Point System</router-link>
+        </div>
+      </div>
+    </nav>
+    <section class="hero is-hidden-mobile is-success is-small has-background-image">
+      <img class="bg-photo" src="@/assets/header.png" />
+      <div class="hero-head"></div>
       <div class="hero-body">
         <div class="container has-text-centered">
           <img class="header-image" src="@/assets/Logo_Radicitus_White.png" />

@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <div class="title">Add Resource</div>
-    <div class="modal-content">
+    <div>
       <b-field label="Name">
         <b-input
           placeholder="Name"

@@ -106,9 +106,16 @@ namespace Radicitus.Health.Redis.RadicitusRedis
             await _db.SetAddAsync("resources", item.Guid.ToString());
         }
 
-        public async Task StoreStringAsync(string key, string value)
+        public async Task StoreStringAsync(string key, string value, TimeSpan? expiration = null)
         {
-            await _db.StringSetAsync(key, value);
+            if (expiration != null)
+            {
+                await _db.StringSetAsync(key, value, expiration);
+            }
+            else
+            {
+                await _db.StringSetAsync(key, value);
+            }
         }
 
 
