@@ -13,7 +13,7 @@ namespace Radicitus.Health.Redis.RadicitusRedis
         Task<List<string>> GetAllTags();
         Task AddTags(List<string> tags);
         Task RemoveResource(Guid guid);
-        Task StoreStringAsync(string key, string value);
+        Task StoreStringAsync(string key, string value, TimeSpan? expiration = null);
         Task<string> GetStringAsync(string key);
         Task<ResourceItem> GetResourceItemByGuid(Guid guid);
     }

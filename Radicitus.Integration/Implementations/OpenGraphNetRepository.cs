@@ -6,6 +6,8 @@ using Radicitus.Health.Dto.Dto;
 using Radicitus.Health.Redis;
 using Radicitus.Health.Redis.RadicitusRedis;
 using System.Text.Json;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Radicitus.Integration.Implementations
 {
@@ -50,11 +52,37 @@ namespace Radicitus.Integration.Implementations
             var openGraphData = await OpenGraph.ParseUrlAsync(url);
             if (openGraphData != null)
             {
+                var tracks = new List<Track>();
+                if (url.Host.ToLower().Contains("spotify"))
+                {
+                    var tracksToParse = openGraphData.Metadata["music:song"];
+                    var trackCrawlerTasks = new List<Task>();
+                    foreach (var track in tracksToParse)
+                    {
+                        var songLink = track.Value;
+                        var songTask = Task.Run(async () =>
+                        {
+                            var data = await OpenGraph.ParseUrlAsync(songLink);
+                            var trackToAdd = new Track
+                            {
+                                Name = data.Metadata["og:title"].FirstOrDefault()?.Value,
+                                PlayUrl = data.Metadata["og:audio"].FirstOrDefault()?.Value
+                            };
+                            tracks.Add(trackToAdd);
+                        });
+                        trackCrawlerTasks.Add(songTask);
+                    }
+                    if (trackCrawlerTasks.Any())
+                    {
+                        await Task.WhenAll(trackCrawlerTasks);
+                    }
+                }
                 return new LinkPreview
                 {
                     ImageUrl = openGraphData.Image,
                     Title = openGraphData.Title,
-                    Html = openGraphData.OriginalHtml
+                    Html = openGraphData.OriginalHtml,
+                    Tracks = tracks.OrderBy(x => x.TrackNumber).ToList()
                 };
             }
             return null;
@@ -63,7 +91,7 @@ namespace Radicitus.Integration.Implementations
         public async Task StorePreview(LinkPreview preview, Guid guid)
         {
             var json = JsonSerializer.Serialize(preview);
-            await _redis.StoreStringAsync($"{guid}:linkpreview", json);
+            await _redis.StoreStringAsync($"{guid}:linkpreview", json, TimeSpan.FromMinutes(20));
         }
     }
 }
