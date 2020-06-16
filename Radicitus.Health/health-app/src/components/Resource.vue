@@ -16,7 +16,10 @@
       </div>
       <div class="columns is-mobile">
         <div class="column">{{resource.description}}</div>
-        <div class="column has-text-right" v-if="linkPreview.tracks">
+        <div
+          class="column has-text-right"
+          v-if="linkPreview.tracks && linkPreview.tracks.length > 0"
+        >
           <button @click="showTracks()" class="is-small button is-outlined is-primary">
             <span class="icon">
               <i class="fa fa-eye"></i>
