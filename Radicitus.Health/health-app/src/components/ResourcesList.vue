@@ -14,7 +14,7 @@
 <template>
   <div class="container">
     <b-loading :is-full-page="false" :active.sync="isLoading"></b-loading>
-    <div v-if="resources.length > 0">
+    <div v-if="!isLoading && resources.length > 0">
       <div class="content">
         <div class="title is-size-2">Health Resources</div>
         <div class="columns">
@@ -102,7 +102,7 @@
         </div>
       </div>
     </div>
-    <div v-else>
+    <div v-if="!isLoading && (!resources.length || resources.length < 1)">
       <div class="is-size-1 has-text-centered">No resources have been added!</div>
       <div class="has-text-centered">
         <button

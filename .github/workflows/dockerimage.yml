@@ -1,10 +1,8 @@
-name: Docker Image CI
+name: Build Develop
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches: [ develop ]
 
 jobs:
 
@@ -15,4 +13,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag nickyg91/radicitus-health:latest
+      run: docker build . --file Dockerfile
