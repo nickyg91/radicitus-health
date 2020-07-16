@@ -33,5 +33,5 @@ jobs:
         # Comma-delimited list of tags. These will be added to the registry/repository to form the image's tags
         tags: latest
         # Path to the build context
-        path: Radicitus.Health
+        path: .
         push: 'true'
